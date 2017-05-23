@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,53 +28,234 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.ejb.OrderStateLessBeanLocal;
+import spring.ejb.ProductStateLessBeanLocal;
 import spring.entity.CartLineInfo;
+import spring.entity.Categories;
 import spring.entity.DiscountVoucher;
-import spring.entity.OrderChart;
+import spring.entity.QuantityOrderChart;
 import spring.entity.Orders;
 import spring.entity.OrdersDetail;
 import spring.entity.ProductColors;
 import spring.entity.Products;
+import spring.entity.RevenueOrderChart;
 import spring.entity.SizesByColor;
+import spring.entity.SubCategories;
 
 @Controller
 @RequestMapping(value = "/admin/orders/")
 public class Orders_Controller {
 
+    ProductStateLessBeanLocal productStateLessBean = lookupProductStateLessBeanLocal();
     OrderStateLessBeanLocal orderStateLessBean = lookupOrderStateLessBeanLocal();
 
     @RequestMapping(value = "list")
     public String ordersList(ModelMap model) {
+        model.addAttribute("orderStatus", 4);
         model.addAttribute("orderList", orderStateLessBean.getAllOrder());
+        return "admin/pages/orders-list";
+    }
+    
+    @RequestMapping(value = "list/{status}")
+    public String ordersListByStatus(ModelMap model, @PathVariable("status") Integer status) {
+        model.addAttribute("orderStatus", status);
+        model.addAttribute("orderList", orderStateLessBean.getAllOrderByStatus(status));
         return "admin/pages/orders-list";
     }
 
     @RequestMapping(value = "orderchart")
     public String ordersChart(ModelMap model) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+        SimpleDateFormat sdfMonth = new SimpleDateFormat("MM-yyyy");
+        String thisMonth = sdfMonth.format(new Date());
+        SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+        String thisYear = sdfYear.format(new Date());
+        List<Orders> orderList = orderStateLessBean.getAllOrder();
+        float totalRevenue = 0;
+        for (Orders order : orderList) {
+            if (order.getOrdersDate().getYear() == (new Date().getYear())) {
+                totalRevenue += order.getPaymentTotal();
+            }
+        }
+        model.addAttribute("thisYear", thisYear);
+        model.addAttribute("avgOrdersRevenueInYear", (totalRevenue/12));
+        model.addAttribute("thisMonth", thisMonth);
+        model.addAttribute("avgOrderPerUserByMonth", orderStateLessBean.averageOrdersPerUserByMonth(date));
+        model.addAttribute("totalOrders", orderStateLessBean.countOrders());
+        model.addAttribute("pendingOrders", orderStateLessBean.countOrderByStatus(2));
+        model.addAttribute("confirmedOrders", orderStateLessBean.countOrderByStatus(3));
+        model.addAttribute("completedOrders", orderStateLessBean.countOrderByStatus(1));
+        model.addAttribute("cancelOrders", orderStateLessBean.countOrderByStatus(0));
+        model.addAttribute("listYear", orderStateLessBean.getAllYearOrdered());
         return "admin/pages/orders-chart";
     }
 
     @ResponseBody
-    @RequestMapping(value = "ajax/getOrderListForChart", method = RequestMethod.GET)
-    public String getOrderListForChart() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        List<Orders> ordersList = orderStateLessBean.getAllOrderASC();
-        List<OrderChart> orderChartList = new ArrayList<>();
-        for (Orders orders : ordersList) {
-            OrderChart orderChart = new OrderChart();
-            String date = sdf.format(orders.getOrdersDate());
-            orderChart.setCategory(orders.getOrdersDate().toString());
-            orderChart.setPaymentTotal(orders.getPaymentTotal());
-            orderChartList.add(orderChart);
+    @RequestMapping(value = "ajax/orderDonutQuantitySubcategory", method = RequestMethod.GET)
+    public String getDonutSubcategoryQuantityForChart() {
+        List<SubCategories> subCategoriesList = productStateLessBean.subCategoryList();
+        List<OrdersDetail> ordersDetailList = orderStateLessBean.getAllOrderDetail();
+        List<QuantityOrderChart> subcateQuantityChartList = new ArrayList<>();
+        for (SubCategories subCategory : subCategoriesList) {
+            String label = subCategory.getCategory().getCateName() + "-" + subCategory.getSubCateName();
+            int value = 0;
+            for (OrdersDetail ordersDetail : ordersDetailList) {
+                if (ordersDetail.getOrder().getStatus() == 1) {
+                    if (ordersDetail.getProduct().getSubCate().getCategory().getCateID().equals(subCategory.getCategory().getCateID())
+                              && ordersDetail.getProduct().getSubCate().getSubCateID().equals(subCategory.getSubCateID())) {
+                        value += ordersDetail.getQuantity();
+                    }
+                }
+            }
+            QuantityOrderChart totalQuantityOrderChart = new QuantityOrderChart();
+            totalQuantityOrderChart.setLabel(label);
+            totalQuantityOrderChart.setValue(value);
+            subcateQuantityChartList.add(totalQuantityOrderChart);
         }
+        Collections.sort(subcateQuantityChartList, new QuantityOrderChart.QuantityOrderChartComparator());
         try {
             ObjectMapper mapper = new ObjectMapper();
-            String result = mapper.writeValueAsString(orderChartList);
+            String result = mapper.writeValueAsString(subcateQuantityChartList);
             return result;
         } catch (Exception e) {
             return "Error!" + e.getMessage();
         }
+    }
 
+    @ResponseBody
+    @RequestMapping(value = "ajax/orderDonutQuantityCategory", method = RequestMethod.GET)
+    public String getDonutCategoryQuantityForChart() {
+        List<Categories> categoriesList = productStateLessBean.categoryList();
+        List<OrdersDetail> ordersDetailList = orderStateLessBean.getAllOrderDetail();
+        List<QuantityOrderChart> categoryQuantityChartList = new ArrayList<>();
+        for (Categories categories : categoriesList) {
+            String label = categories.getCateName();
+            int value = 0;
+            for (OrdersDetail ordersDetail : ordersDetailList) {
+                if (ordersDetail.getOrder().getStatus() == 1) {
+                    if (ordersDetail.getProduct().getCategory().getCateID().equals(categories.getCateID())) {
+                        value += ordersDetail.getQuantity();
+                    }
+                }
+            }
+            QuantityOrderChart totalQuantityOrderChart = new QuantityOrderChart();
+            totalQuantityOrderChart.setLabel(label);
+            totalQuantityOrderChart.setValue(value);
+            categoryQuantityChartList.add(totalQuantityOrderChart);
+        }
+        Collections.sort(categoryQuantityChartList, new QuantityOrderChart.QuantityOrderChartComparator());
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(categoryQuantityChartList);
+            return result;
+        } catch (Exception e) {
+            return "Error!" + e.getMessage();
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "ajax/orderDonutMoneyCategory", method = RequestMethod.GET)
+    public String getDonutCategoryRevenueForChart() {
+        List<Categories> categoriesList = productStateLessBean.categoryList();
+        List<OrdersDetail> ordersDetailList = orderStateLessBean.getAllOrderDetail();
+        List<RevenueOrderChart> totalRevenueSubcateChartList = new ArrayList<>();
+        for (Categories categories : categoriesList) {
+            String label = categories.getCateName();
+            float value = 0;
+            for (OrdersDetail ordersDetail : ordersDetailList) {
+                if (ordersDetail.getOrder().getStatus() == 1) {
+                    if (ordersDetail.getProduct().getCategory().getCateID().equals(categories.getCateID())) {
+                        value += ordersDetail.getSubTotal();
+                    }
+                }
+            }
+            RevenueOrderChart revenueOrderChart = new RevenueOrderChart();
+            revenueOrderChart.setLabel(label);
+            revenueOrderChart.setValue(value);
+            totalRevenueSubcateChartList.add(revenueOrderChart);
+        }
+        Collections.sort(totalRevenueSubcateChartList, new RevenueOrderChart.RevenueOrderChartComparator());
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(totalRevenueSubcateChartList);
+            return result;
+        } catch (Exception e) {
+            return "Error!" + e.getMessage();
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "ajax/orderDonutMoneySubcategory", method = RequestMethod.GET)
+    public String getDonutSubcategoryRevenueForChart() {
+        List<SubCategories> subCategoriesList = productStateLessBean.subCategoryList();
+        List<OrdersDetail> ordersDetailList = orderStateLessBean.getAllOrderDetail();
+        List<RevenueOrderChart> totalRevenueSubcateChartList = new ArrayList<>();
+        for (SubCategories subCategory : subCategoriesList) {
+            String label = subCategory.getCategory().getCateName() + "-" + subCategory.getSubCateName();
+            float value = 0;
+            for (OrdersDetail ordersDetail : ordersDetailList) {
+                if (ordersDetail.getOrder().getStatus() == 1) {
+                    if (ordersDetail.getProduct().getSubCate().getCategory().getCateID().equals(subCategory.getCategory().getCateID())
+                              && ordersDetail.getProduct().getSubCate().getSubCateID().equals(subCategory.getSubCateID())) {
+                        value += ordersDetail.getSubTotal();
+                    }
+                }
+            }
+            RevenueOrderChart revenueOrderChart = new RevenueOrderChart();
+            revenueOrderChart.setLabel(label);
+            revenueOrderChart.setValue(value);
+            totalRevenueSubcateChartList.add(revenueOrderChart);
+        }
+        Collections.sort(totalRevenueSubcateChartList, new RevenueOrderChart.RevenueOrderChartComparator());
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(totalRevenueSubcateChartList);
+            return result;
+        } catch (Exception e) {
+            return "Error!" + e.getMessage();
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "ajax/orderLineMoneyChart", method = RequestMethod.GET)
+    public String getLineRevenueForChart(@RequestParam("month") Integer month,
+              @RequestParam("year") Integer year) {
+        List<Orders> orderList = orderStateLessBean.getAllOrderByMonth(month,year);
+        List<Integer> dayOrderedList = orderStateLessBean.getAllDayOrderedByMonth(month,year);
+        List<RevenueOrderChart> totalRevenueSubcateChartList = new ArrayList<>();
+        for (Integer day : dayOrderedList) {
+            String label = String.valueOf(year) + "-" + String.valueOf(month) + "-" + day;
+            float value = 0;
+            for (Orders order : orderList) {
+                if (order.getOrdersDate().getDate() == day && order.getStatus() == 1) {
+                    value += order.getPaymentTotal();
+                }
+            }
+            RevenueOrderChart revenueOrderChart = new RevenueOrderChart();
+            revenueOrderChart.setLabel(label);
+            revenueOrderChart.setValue(value);
+            totalRevenueSubcateChartList.add(revenueOrderChart);
+        }
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(totalRevenueSubcateChartList);
+            return result;
+        } catch (Exception e) {
+            return "Error!" + e.getMessage();
+        }
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "ajax/getMonthOrderedByYear", method = RequestMethod.GET)
+    public String getMonthOrderedByYear(@RequestParam("year") Integer year) {
+        List<Integer> monthList = orderStateLessBean.getAllMonthOrderedByYear(year);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(monthList);
+            return result;
+        } catch (Exception e) {
+            return "Error!" + e.getMessage();
+        }
     }
 
     @RequestMapping(value = "discountlist")
@@ -323,33 +506,20 @@ public class Orders_Controller {
         return "admin/orders-invoice";
     }
 
-//    @ResponseBody
-//    @RequestMapping(value = "createPDF", method = RequestMethod.POST)
-//    public String toDoc(@RequestParam("htmlContent") String htmlContent) {
-//        htmlContent = "<table border=\"0\" style=\"border-collapse: collapse; width: 800px;\">\n"
-//                  + "                <tr>\n"
-//                  + "                    <td align=\"left\" style=\"padding-left: 10px\"><img src=\"assets/images/basic/logo.png\" class=\"img-responsive\" alt=\"\"></img></td>\n"
-//                  + "                    <td align=\"left\"><b style=\"font-size: 50px;\">INVOICE</b></td>\n"
-//                  + "                </tr>\n"
-//                  + "                <tr>\n"
-//                  + "                    <td><br></br><br></br></td>\n"
-//                  + "                </tr>\n"
-//                  + "                <tr>\n"
-//                  + "                    <td align=\"right\"><b>Order No:</b></td>\n"
-//                  + "                    <td># ${orders.ordersID}</td>\n"
-//                  + "                </tr>\n"
-//                  + "                <tr>\n"
-//                  + "                    <td align=\"right\"><b>Order Date:</b></td>\n"
-//                  + "                    <td><fmt:formatDate value=\"${orders.ordersDate}\" pattern=\"dd-MM-yyyy hh:mm:ss\"></fmt:formatDate></td>\n"
-//                  + "                </tr>\n"
-//                  + "            </table>";
-//        String show = orderStateLessBean.createPDF(htmlContent);
-//        return show;
-//    }
     private OrderStateLessBeanLocal lookupOrderStateLessBeanLocal() {
         try {
             Context c = new InitialContext();
             return (OrderStateLessBeanLocal) c.lookup("java:global/fashionshop/OrderStateLessBean!spring.ejb.OrderStateLessBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProductStateLessBeanLocal lookupProductStateLessBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (ProductStateLessBeanLocal) c.lookup("java:global/fashionshop/ProductStateLessBean!spring.ejb.ProductStateLessBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

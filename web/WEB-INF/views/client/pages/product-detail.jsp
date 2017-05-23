@@ -2,7 +2,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!-- BREADCRUMBS -->
 <jsp:include page="../blocks/breadcrumbs.jsp" flush="true"/>
 
@@ -13,7 +12,6 @@
         <div class="row">
             <div class="col-md-12 col-sm-12">
                 <div id="error-product-detail">
-
                 </div>
                 <div class="row">
                     <div class="col-md-5 col-sm-6" id="fs-product-detail-slide-img">                                    
@@ -41,14 +39,13 @@
                                 <div class="ps-price"><h1>$ ${targetProduct.price}0</h1></div>
                             </div>
                             <div class="ps-stock">
-                                Availability: <span style="color: #d6644a" class="fs-quantity-in-stock">---</span>
-                                <div class="fs-display-none" id="fs-show-quantity"></div>
+                                Availability: <a href="#">In Stock</a>
                             </div>
                             <div class="sep"></div>
                             <div class="ps-color fs-product-color">
                                 <p>Color<span>*</span></p>
-                                <c:forEach items="${targetProduct.productColorListWorking}" var="color">
-                                    <div class="fs-product-color-border <c:if test="${color.colorID == targetColor.colorID}">fs-product-selected</c:if>" >
+                                <c:forEach items="${targetProduct.productColorList}" var="color">
+                                    <div class="fs-product-color-border">
                                         <img fs-color="${color.colorID}" src="assets/images/products/colors/${color.urlColorImg}" class="img-responsive" alt="${color.urlColorImg}" title="${color.color}"/>
                                     </div>
                                 </c:forEach>
@@ -62,7 +59,7 @@
                                     <div id="fs-product-size">
                                         <c:forEach items="${targetColor.sizeList}" var="size">
                                             <c:if test="${size.status != 0}">
-                                                <div class="fs-particular-size <c:if test="${size.quantity == 0}">fs-unselectable</c:if>" 
+                                                <div class="fs-particular-size" 
                                                      fs-product="${targetProduct.productID}" 
                                                      fs-size="${size.sizeID}">
                                                     ${size.productSize}
@@ -80,10 +77,10 @@
                                             </button>
                                         </span>
 
-                                        <input type="text" name="quantity" id="quantity" class="form-control fs-input-number text-center" value="1" min="1" max="10" disabled>
+                                        <input type="text" name="quantity" id="quantity" class="form-control fs-input-number text-center" value="1" min="1" max="10">
 
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success fs-btn-number fs-btn-quantity-plus" data-type="plus" disabled>
+                                            <button type="button" class="btn btn-success fs-btn-number fs-btn-quantity-plus" data-type="plus" >
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </button>
                                         </span>
@@ -275,65 +272,140 @@
                     <div class="col-md-12 col-sm-12">
                         <h5 class="heading space40"><span>Recently Products</span></h5>
                         <div class="product-carousel3">
-                            <c:if test="${recentProductList != null}">
-                                <c:forEach items="${recentProductList}" var="prod">
-                                    <div class="pc-wrap">
-                                        <div class="product-item">
-                                            <div class="item-thumb">
-                                                <c:if test="${prod.productDiscount > 0}">
-                                                    <div class="badge offer">-${prod.productDiscount}%</div>
-                                                </c:if>
-                                                <img src="assets/images/products/${prod.urlImg}" 
-                                                     class="img-responsive" 
-                                                     alt="${prod.urlImg}" 
-                                                     fs-product-for-img="${prod.productID}"/>
-                                                <div class=" fs-product-modal" 
-                                                     fs-product="${prod.productID}" 
-                                                     fs-product-modal-color="${prod.productColorListWorking[0].colorID}" 
-                                                     data-toggle="modal" ></div>
-                                                <div class="product-overlay">
-                                                    <a href="#" class="addcart fa fa-shopping-cart"></a>
-                                                    <a class="likeitem fa fa-heart-o fs-wl-add-lsp"
-                                                       fs-userID="${sessionScope.findUsersID}" fs-productID="${prod.productID}" ></a>
-                                                    <input type="hidden" name="emailUser" value="${sessionScope.emailUser}" />
-                                                </div>
-                                            </div>
-                                            <div class="product-info">
-                                                <h4 class="product-title">
-                                                    <a href="${prod.productID}-${prod.productColorListWorking[0].colorID}-${prod.productNameNA}.html">
-                                                        ${prod.productName}
-                                                    </a>
-                                                </h4>
-
-                                                <span class="product-price">
-                                                    <c:if test="${prod.productDiscount > 0}">
-                                                        <small class="cutprice">$ ${prod.price}0 </small>  $
-                                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="${prod.price - (prod.price*prod.productDiscount/100)}" var="prodPrice"/>
-                                                        ${fn:replace(prodPrice, ",", ".")}
-
-                                                    </c:if>
-                                                    <c:if test="${prod.productDiscount == 0}">
-                                                        $ ${prod.price}0
-                                                    </c:if>
-                                                </span>
-
-                                                <div class="item-colors">
-                                                    <c:if test="${prod.productColorListWorking.size() > 1}">
-                                                        <c:forEach items="${prod.productColorListWorking}" var="color">
-                                                            <img src="assets/images/products/colors/${color.urlColorImg}" 
-                                                                 class="img-responsive fs-index-color-img" 
-                                                                 fs-index-color-img="${color.colorID}" 
-                                                                 fs-product="${prod.productID}" 
-                                                                 alt="${color.urlColorImg}" 
-                                                                 title="${color.color}"/>
-                                                        </c:forEach>
-                                                    </c:if>
-                                                </div>
-                                            </div>
+                            <div class="pc-wrap">
+                                <div class="product-item">
+                                    <div class="item-thumb">
+                                        <span class="badge new">New</span>
+                                        <img src="assets/images/products/fashion/5.jpg" class="img-responsive" alt=""/>
+                                        <div class="overlay-rmore fa fa-search quickview" data-toggle="modal" data-target="#myModal"></div>
+                                        <div class="product-overlay">
+                                            <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                            <a href="#" class="compare fa fa-signal"></a>
+                                            <a href="#" class="likeitem fa fa-heart-o"></a>
                                         </div>
                                     </div>
-                                </c:forEach>
-                            </c:if>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="./single-product.html">Product fashion</a></h4>
+                                        <span class="product-price">$99.00 <em>- Pre order</em></span>
+                                        <div class="item-colors">
+                                            <a href="#" class="brown"></a>
+                                            <a href="#" class="white"></a>
+                                            <a href="#" class="litebrown"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pc-wrap">
+                                <div class="product-item">
+                                    <div class="item-thumb">
+                                        <img src="assets/images/products/fashion/15.jpg" class="img-responsive" alt=""/>
+                                        <div class="overlay-rmore fa fa-search quickview" data-toggle="modal" data-target="#myModal"></div>
+                                        <div class="product-overlay">
+                                            <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                            <a href="#" class="compare fa fa-signal"></a>
+                                            <a href="#" class="likeitem fa fa-heart-o"></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="./single-product.html">Product fashion</a></h4>
+                                        <span class="product-price">$99.00 <em>- Pre order</em></span>
+                                        <div class="item-colors">
+                                            <a href="#" class="red"></a>
+                                            <a href="#" class="darkgrey"></a>
+                                            <a href="#" class="litebrown"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pc-wrap">
+                                <div class="product-item">
+                                    <div class="item-thumb">
+                                        <span class="badge offer">-50%</span>
+                                        <img src="assets/images/products/accessories/8.jpg" class="img-responsive" alt=""/>
+                                        <div class="overlay-rmore fa fa-search quickview" data-toggle="modal" data-target="#myModal"></div>
+                                        <div class="product-overlay">
+                                            <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                            <a href="#" class="compare fa fa-signal"></a>
+                                            <a href="#" class="likeitem fa fa-heart-o"></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="./single-product.html">Product accessories</a></h4>
+                                        <span class="product-price"><small class="cutprice">$ 200.00</small> $99.00 <em>- Pre order</em></span>
+                                        <div class="item-colors">
+                                            <a href="#" class="black"></a>
+                                            <a href="#" class="darkgrey"></a>
+                                            <a href="#" class="red"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pc-wrap">
+                                <div class="product-item">
+                                    <div class="item-thumb">
+                                        <img src="assets/images/products/fashion/18.jpg" class="img-responsive" alt=""/>
+                                        <div class="overlay-rmore fa fa-search quickview" data-toggle="modal" data-target="#myModal"></div>
+                                        <div class="product-overlay">
+                                            <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                            <a href="#" class="compare fa fa-signal"></a>
+                                            <a href="#" class="likeitem fa fa-heart-o"></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="./single-product.html">Product fashion</a></h4>
+                                        <span class="product-price">$99.00 <em>- Pre order</em></span>
+                                        <div class="item-colors">
+                                            <a href="#" class="black"></a>
+                                            <a href="#" class="liteblue"></a>
+                                            <a href="#" class="litebrown"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pc-wrap">
+                                <div class="product-item">
+                                    <div class="item-thumb">
+                                        <img src="assets/images/products/fashion/10.jpg" class="img-responsive" alt=""/>
+                                        <div class="overlay-rmore fa fa-search quickview" data-toggle="modal" data-target="#myModal"></div>
+                                        <div class="product-overlay">
+                                            <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                            <a href="#" class="compare fa fa-signal"></a>
+                                            <a href="#" class="likeitem fa fa-heart-o"></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="./single-product.html">Product fashion</a></h4>
+                                        <span class="product-price">$99.00 <em>- Pre order</em></span>
+                                        <div class="item-colors">
+                                            <a href="#" class="black"></a>
+                                            <a href="#" class="darkgrey"></a>
+                                            <a href="#" class="litebrown"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pc-wrap">
+                                <div class="product-item">
+                                    <div class="item-thumb">
+                                        <img src="assets/images/products/accessories/5.jpg" class="img-responsive" alt=""/>
+                                        <div class="overlay-rmore fa fa-search quickview" data-toggle="modal" data-target="#myModal"></div>
+                                        <div class="product-overlay">
+                                            <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                            <a href="#" class="compare fa fa-signal"></a>
+                                            <a href="#" class="likeitem fa fa-heart-o"></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h4 class="product-title"><a href="./single-product.html">Product fashion</a></h4>
+                                        <span class="product-price">$99.00 <em>- Pre order</em></span>
+                                        <div class="item-colors">
+                                            <a href="#" class="brown"></a>
+                                            <a href="#" class="white"></a>
+                                            <a href="#" class="litebrown"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -346,13 +418,13 @@
 <div class="clearfix space20"></div>
 
 <!-- BREADCRUMBS -->
-
-<jsp:include page="../blocks/modal.jsp" flush="true"/>
 <script type="text/javascript">
+
     var productObj = {
         productID: '${targetProduct.productID}',
         productColorID: '${targetColor.colorID}',
         productName: '${targetProduct.productName}',
+        price: '${targetProduct.price}',
         productNameNA: '${targetProduct.productNameNA}',
         productImg: '${targetProduct.urlImg}'
     };
@@ -383,3 +455,4 @@
         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
     }
 </script>
+<jsp:include page="../blocks/modal.jsp" flush="true"/>

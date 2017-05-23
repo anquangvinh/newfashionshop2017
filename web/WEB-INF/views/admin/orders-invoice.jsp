@@ -48,8 +48,8 @@
             <table border="1" style="border-collapse: collapse; width: 800px;">
                 <thead>
                     <tr>
-                        <th>Client Order</th>
-                        <th>Ship to Address</th>
+                        <th style="padding-left: 20px;">Client Order</th>
+                        <th style="padding-left: 20px;">Ship to Address</th>
                     </tr>
                 </thead>
                 <tbody>

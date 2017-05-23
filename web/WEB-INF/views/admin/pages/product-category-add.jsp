@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!-- Page Content -->
 <div id="page-wrapper">
-    <div class="container-fluid" id="fs-category-add-page">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header"> 
@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="col-lg-6">
-                    <div id="fs-create-category-error-mess-server">
+                    <div>
                         ${error}
                     </div>
                     <form:form method="POST" action="admin/product-category/create.html" modelAttribute="newCate">
@@ -27,10 +27,10 @@
                             <form:input path="cateName" cssClass="form-control" placeholder="Enter Product Category Name" />
 
                             <!--Error Message-->
-                            <p class="help-block" id="fs-cate-name-err-mes"></p>
+<!--                            <p class="help-block">Error Message will be here!!!</p>-->
                         </div>
 
-                            <button type="submit" class="btn btn-success" id="fs-btn-create-category">Create</button>
+                        <button type="submit" class="btn btn-success">Create</button>
                         <button type="reset" class="btn btn-default">Reset</button>
                     </form:form>
                 </div>

@@ -23,22 +23,53 @@
                         <table class="cart-table">
                             <thead>
                                 <tr>
-                                    <!--<th>ID</th>-->
-                                    <th>Product Name</th>
-                                    <th>Color</th>
-                                    <th>Size</th>
-                                    <th>Quantity</th>
-                                    <th>Price for one</th>
-                                    <th>Product discount</th>
-                                    <th>SubTotal</th>
-                                    <th>Status</th>
+                                    <th style="font-weight: 700;">Order Date</th>
+                                    <td><fmt:formatDate value="${order.ordersDate}" pattern="dd-MM-yyyy hh:mm:ss"/></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-weight: 700;">Ship to</th>
+                                    <td>${order.receiverFirstName} ${order.receiverLastName}</td>
+                                </tr>
+                                <tr>
+                                    <th style="font-weight: 700;">Address</th>
+                                    <td>${order.deliveryAddress}</td>
+                                </tr>
+                                <tr>
+                                    <th style="font-weight: 700;">Phone</th>
+                                    <td>${order.phoneNumber}</td>
+                                </tr>
+                                <tr>
+                                    <th style="font-weight: 700;">Order Note</th>
+                                    <td>${order.note}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div><br/>
+                    <div class="order-history">
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th style="font-weight: 700;">Product Name</th>
+                                    <th style="font-weight: 700;">Color</th>
+                                    <th style="font-weight: 700;">Size</th>
+                                    <th style="font-weight: 700;">Quantity</th>
+                                    <th style="font-weight: 700;">Price for one</th>
+                                    <th style="font-weight: 700;">Product discount</th>
+                                    <th style="font-weight: 700;">SubTotal</th>
+                                    <th style="font-weight: 700;">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach items="${orderdetailList}" var="orderdetail">
                                     <tr>
-                                        <!--<td align="center">${orderdetail.ordersDetailID}</td>-->
-                                        <td class="text-center fs-valign-middle">${orderdetail.getProduct().getProductName()}</td>
+                                        <td class="text-center fs-valign-middle">
+                                            <a href="${orderdetail.getProduct().productID}-${orderdetail.getProduct().productColorList[0].colorID}-${orderdetail.getProduct().productNameNA}.html">
+                                                ${orderdetail.getProduct().productName}
+                                            </a>
+                                        </td>
                                         <td class="text-center fs-valign-middle">${orderdetail.getSize().getColor().getColor()}</td>
                                         <td class="text-center fs-valign-middle" style="width: 50px;">${orderdetail.getSize().productSize}</td>
                                         <td class="text-center fs-valign-middle">${orderdetail.quantity}</td>
@@ -76,14 +107,6 @@
                                 </tr>
                             </tfoot>
                         </table>
-                    </div><br/>
-                    <div class="order-history">
-                        <table class="cart-table">
-                            <tr>
-                                <th style="width: 200px;">Order Note</th>
-                                <td>${order.note}</td>
-                            </tr>
-                        </table>
                     </div>
                     <div class="clearfix space10"></div>
                     <c:if test="${order.status == 2}">
@@ -95,6 +118,9 @@
                                     data-target="#confirm-cancel-order">CANCEL ORDER</button>
                         </div>
                     </c:if>
+                    <div class="order-history">
+                        <button class="btn btn-primary pull-right" onclick="window.location = 'orders/order-history.html'">BACK TO ORDER HISTORY LIST</button>
+                    </div>
                 </div>
                 <div class="modal fade" id="confirm-cancel-order" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">

@@ -21,6 +21,53 @@
 
         <div class="row">
             <div class="col-lg-12">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th class="text-center" style="font-weight: 700;">Order Date</th>
+                        <td class="text-center"><fmt:formatDate value="${order.ordersDate}" pattern="dd-MM-yyyy"/></td>
+                        <td class="text-center"><fmt:formatDate value="${order.ordersDate}" pattern="hh:mm:ss"/></td>
+                    </tr>
+                    <tr>
+                        <th class="text-center" style="font-weight: 700;">Ship to</th>
+                        <td colspan="2" style="padding-left: 20px;">${order.receiverFirstName} ${order.receiverLastName}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center" style="font-weight: 700;">Address</th>
+                        <td colspan="2" style="padding-left: 20px;">${order.deliveryAddress}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center" style="font-weight: 700;">Phone</th>
+                        <td colspan="2" style="padding-left: 20px;">${order.phoneNumber}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center" style="width: 200px;">Discount Code</th>
+                        <td colspan="2" style="padding-left: 20px;">
+                            <c:choose>
+                                <c:when test="${order.voucher.voucherID == null}">
+                                    --
+                                </c:when>
+                                <c:otherwise>
+                                    ${order.voucher.voucherID}
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center" style="width: 200px;">Order Note</th>
+                        <td colspan="2" style="padding-left: 20px;">
+                            <c:choose>
+                                <c:when test="${order.note == null}">
+                                    --
+                                </c:when>
+                                <c:otherwise>
+                                    ${order.note}
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-12">
                 <table width="100%" class="table table-striped table-bordered table-hover" id="tableOrderDetails">
                     <thead>
                         <tr>
@@ -47,25 +94,38 @@
                                 <td class="text-center fs-valign-middle">-$${orderdetail.product.getProductDiscountPrice()}</td>
                                 <td class="text-center fs-valign-middle">$${orderdetail.getTotalPrice()}</td>
                                 <td class="text-center fs-valign-middle">
-                                    <select name="status-orderDetail" id="id-status-orderdetail" class="form-control input-sm" onchange="window.location = 'admin/orders/confirmstatusOrderDetail/${orderdetail.ordersDetailID}/' + this.value + '.html';">
-                                        <c:choose>
-                                            <c:when test="${orderdetail.status == 1}">
+                                    <c:choose>
+                                        <c:when test="${orderdetail.status == 1}">
+                                            <select name="status-orderDetail" style="color: red;"
+                                                    id="id-status-orderdetail" 
+                                                    class="form-control input-sm" 
+                                                    onchange="window.location = 'admin/orders/confirmstatusOrderDetail/${orderdetail.ordersDetailID}/' + this.value + '.html';">
                                                 <option value="0">Not Change</option>
                                                 <option value="1" <c:out value="selected"/>>Canceled</option>
                                                 <option value="2">New</option>
-                                            </c:when>
-                                            <c:when test="${orderdetail.status == 2}">
+                                            </select>
+                                        </c:when>
+                                        <c:when test="${orderdetail.status == 2}">
+                                            <select name="status-orderDetail" style="color: #00cc66;"
+                                                    id="id-status-orderdetail"
+                                                    class="form-control input-sm" 
+                                                    onchange="window.location = 'admin/orders/confirmstatusOrderDetail/${orderdetail.ordersDetailID}/' + this.value + '.html';">
                                                 <option value="0">Not Change</option>
                                                 <option value="1">Canceled</option>
                                                 <option value="2" <c:out value="selected"/>>New</option>
-                                            </c:when>
-                                            <c:otherwise>
+                                            </select>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <select name="status-orderDetail" 
+                                                    id="id-status-orderdetail" 
+                                                    class="form-control input-sm" 
+                                                    onchange="window.location = 'admin/orders/confirmstatusOrderDetail/${orderdetail.ordersDetailID}/' + this.value + '.html';">
                                                 <option value="0" <c:out value="selected"/>>Not Change</option>
                                                 <option value="1">Canceled</option>
                                                 <option value="2">New</option>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </select>
+                                            </select>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -98,38 +158,10 @@
                 </table>
                 <!-- /.table-responsive -->
             </div>
-            <div class="col-lg-12">
-                <table class="table table-striped table-bordered table-hover">
-                    <tr>
-                        <th style="width: 200px;">Discount Code</th>
-                        <td>
-                            <c:choose>
-                                <c:when test="${order.voucher.voucherID == null}">
-                                    --
-                                </c:when>
-                                <c:otherwise>
-                                    ${order.voucher.voucherID}
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="width: 200px;">Order Note</th>
-                        <td>
-                            <c:choose>
-                                <c:when test="${order.note == null}">
-                                    --
-                                </c:when>
-                                <c:otherwise>
-                                    ${order.note}
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+
             <div class="col-lg-12" align="right">
                 <button onclick="window.location = 'admin/orders/invoice/${order.ordersID}.html';" class="btn btn-primary">INVOICE</button>
+                <button onclick="window.location = 'admin/orders/list.html'" class="btn btn-primary">BACK TO ORDER LIST</button>
             </div>
             <!-- /.col-lg-12 -->
         </div>

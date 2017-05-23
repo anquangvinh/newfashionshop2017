@@ -5,17 +5,11 @@
  */
 package spring.ejb;
 
-import java.io.FileOutputStream;
-import java.io.StringReader;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 import spring.entity.CartLineInfo;
 import spring.entity.Categories;
 import spring.entity.DiscountVoucher;
@@ -24,6 +18,7 @@ import spring.entity.OrdersDetail;
 import spring.entity.Products;
 import spring.entity.SizesByColor;
 import spring.entity.ProductColors;
+import spring.entity.Users;
 
 /**
  *
@@ -48,7 +43,13 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
             return null;
         }
     }
-    
+
+    @Override
+    public List<OrdersDetail> getAllOrderDetail() {
+        Query q = getEntityManager().createQuery("SELECT od FROM OrdersDetail od", OrdersDetail.class);
+        return q.getResultList();
+    }
+
     @Override
     public List<Orders> getAllOrderASC() {
         try {
@@ -62,8 +63,20 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
     @Override
     public List<Orders> getAllOrderByUserID(int userID) {
         try {
-            Query q = getEntityManager().createQuery("SELECT o FROM Orders o WHERE o.user.userID = :userID", Orders.class);
+            Query q = getEntityManager().createQuery("SELECT o FROM Orders o WHERE o.user.userID = :userID ORDER BY o.ordersDate DESC", Orders.class);
             q.setParameter("userID", userID);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Orders> getAllOrderByUserIDAndStatus(int userID, int status) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT o FROM Orders o WHERE o.user.userID = :userID AND o.status = :status ORDER BY o.ordersDate DESC", Orders.class);
+            q.setParameter("userID", userID);
+            q.setParameter("status", status);
             return q.getResultList();
         } catch (Exception e) {
             return null;
@@ -97,7 +110,7 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
         try {
             Query q = getEntityManager().createQuery("SELECT o FROM OrdersDetail o WHERE o.ordersDetailID = :orderDetailID", OrdersDetail.class);
             q.setParameter("orderDetailID", orderDetailID);
-            return (OrdersDetail)q.getSingleResult();
+            return (OrdersDetail) q.getSingleResult();
         } catch (Exception e) {
             return null;
         }
@@ -152,6 +165,7 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
         try {
             orders.setStatus(status);
             getEntityManager().merge(orders);
+            getEntityManager().flush();
             return true;
         } catch (Exception ex) {
             return false;
@@ -163,6 +177,7 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
         try {
             ordersDetail.setStatus(status);
             getEntityManager().merge(ordersDetail);
+            getEntityManager().flush();
             return true;
         } catch (Exception ex) {
             return false;
@@ -226,6 +241,7 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
             targetDiscountVoucher.setOrdersList(oldDiscountVoucher.getOrdersList());
             try {
                 getEntityManager().merge(targetDiscountVoucher);
+                getEntityManager().flush();
                 checkError = 1;
             } catch (Exception e) {
                 checkError = 0;
@@ -249,35 +265,6 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
     }
 
     @Override
-    public String createPDF(String html) {
-        String error = "";
-//        try {
-////            W3CDom w3CDom = new W3CDom();
-////            Document doc = w3CDom.fromJsoup(Jsoup.parse(html));
-//            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//            InputSource is = new InputSource();
-//            is.setCharacterStream(new StringReader(html));
-//            Document doc = db.parse(is);
-////            ITextRenderer renderer = new ITextRenderer();
-//////            ResourceLoaderUserAgent callback = new ResourceLoaderUserAgent(renderer.getOutputDevice());
-//////            callback.setSharedContext(renderer.getSharedContext());
-//////            renderer.getSharedContext().setUserAgentCallback(callback);
-////            renderer.setDocument(doc,null);
-////            renderer.layout();
-//            String fileNameWithPath = "D:\\Download\\fashionshop.pdf";
-//            try (FileOutputStream fileOutputStream = new FileOutputStream(fileNameWithPath)) {
-////                renderer.createPDF(fileOutputStream);
-//                error = doc.toString();
-//            } catch (Exception ex) {
-//                error = ex.getMessage();
-//            }
-//        } catch (Exception e) {
-//            error = e.getMessage();
-//        }
-        return error;
-    }
-
-    @Override
     public int createOrderDetail(CartLineInfo cartLineInfo, Orders orders) {
         int checkError = 0;
         OrdersDetail ordersDetail = new OrdersDetail();
@@ -288,11 +275,11 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
         ordersDetail.setQuantity(cartLineInfo.getQuantity());
         ordersDetail.setSize(cartLineInfo.getSizesByColor());
         ordersDetail.setStatus(Short.valueOf("2"));
+        orders.getOrderDetailList().add(ordersDetail);
         SizesByColor sizesByColor = cartLineInfo.getSizesByColor();
         sizesByColor.setQuantity(sizesByColor.getQuantity() - cartLineInfo.getQuantity());
         try {
-            getEntityManager().persist(ordersDetail);
-            getEntityManager().flush();
+            getEntityManager().merge(orders);
             getEntityManager().merge(sizesByColor);
             getEntityManager().flush();
             checkError = 1;
@@ -319,5 +306,122 @@ public class OrderStateLessBean implements OrderStateLessBeanLocal {
         }
     }
 
-    
+    @Override
+    public List<Integer> getAllYearOrdered() {
+        try {
+            Query q = getEntityManager().createQuery("SELECT FUNCTION('YEAR',o.ordersDate) FROM Orders o GROUP BY FUNCTION('YEAR',o.ordersDate) ORDER BY FUNCTION('YEAR',o.ordersDate) DESC", Orders.class);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Orders> getAllOrderByMonth(int month, int year) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT o FROM Orders o WHERE FUNCTION('MONTH',o.ordersDate) = FUNCTION('MONTH',:month) AND FUNCTION('YEAR',o.ordersDate) = FUNCTION('YEAR',:year)", Orders.class);
+            q.setParameter("month", "2015-" + String.valueOf(month) + "-15");
+            q.setParameter("year", String.valueOf(year) + "-" + String.valueOf(month) + "-15");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Integer> getAllDayOrderedByMonth(int month, int year) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT FUNCTION('DAY',o.ordersDate) FROM Orders o WHERE FUNCTION('MONTH',o.ordersDate) = FUNCTION('MONTH',:month) AND FUNCTION('YEAR',o.ordersDate) = FUNCTION('YEAR',:year) GROUP BY FUNCTION('DAY',o.ordersDate)", Orders.class);
+            q.setParameter("month", "2015-" + String.valueOf(month) + "-15");
+            q.setParameter("year", String.valueOf(year) + "-" + String.valueOf(month) + "-15");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Integer> getAllMonthOrderedByYear(int year) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT FUNCTION('MONTH',o.ordersDate) FROM Orders o WHERE FUNCTION('YEAR',o.ordersDate) = FUNCTION('YEAR',:year) GROUP BY FUNCTION('MONTH',o.ordersDate)", Orders.class);
+            q.setParameter("year", String.valueOf(year) + "-05-15");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer countOrderByStatus(int status) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT COUNT(o.status) FROM Orders o WHERE o.status = :status", Orders.class);
+            q.setParameter("status", status);
+            return Integer.parseInt(q.getSingleResult().toString());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer countOrders() {
+        try {
+            Query q = getEntityManager().createQuery("SELECT COUNT(o.ordersID) FROM Orders o", Orders.class);
+            return Integer.parseInt(q.getSingleResult().toString());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer averageOrdersPerUserByMonth(String date) {
+        int orders = countAllOrdersByMonthYear(date);
+        int users = countAllUsersByRole();
+        return Math.round(orders / users);
+    }
+
+    @Override
+    public Integer countAllOrdersByMonthYear(String date) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT COUNT(o.ordersID) FROM Orders o WHERE FUNCTION('MONTH',o.ordersDate) = FUNCTION('MONTH',:date) AND FUNCTION('YEAR',o.ordersDate) = FUNCTION('YEAR',:date)", Orders.class);
+            q.setParameter("date", date);
+            return Integer.parseInt(q.getSingleResult().toString());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer countAllUsersByRole() {
+        try {
+            Query u = getEntityManager().createQuery("SELECT COUNT(u.userID) FROM Users u WHERE u.role.roleID = :roleID AND u.status = :status", Users.class);
+            u.setParameter("roleID", 3);
+            u.setParameter("status", 1);
+            return Integer.parseInt(u.getSingleResult().toString());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Orders> getAllOrderByStatus(int status) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT o FROM Orders o WHERE o.status = :status ORDER BY o.ordersDate DESC", Orders.class);
+            q.setParameter("status", status);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Users> getAllUserUseDiscountVoucherByVouID(String vouID) {
+        try {
+            Query q = getEntityManager().createQuery("SELECT u FROM Users u, Orders o, DiscountVoucher dv WHERE u.userID = o.user.userID AND o.voucher.voucherID = dv.voucherID AND dv.voucherID = :vouID", Orders.class);
+            q.setParameter("vouID", vouID);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

@@ -47,7 +47,7 @@
                                         </p>
                                     </td>
                                     <td style="width: 100px;" align="center">
-                                        <select name="${item.getProduct().productID}-${item.getSizesByColor().getSizeID()}-${item.getSizesByColor().getColor().getColorID()}">
+                                        <select id="select-quantity-shoppingcart" name="${item.getProduct().productID}-${item.getSizesByColor().getSizeID()}-${item.getSizesByColor().getColor().getColorID()}">
                                             <%
                                                 CartLineInfo cartLineInfo = (CartLineInfo) pageContext.getAttribute("item");
                                                 for (int i = 1; i < 11; i++) {
@@ -91,7 +91,7 @@
                     </div>
                 </form>
                 <div class="table-btn" style="padding-top: 10px;">
-                    <button onclick="btnCheckoutClick();" class="btn btn-danger pull-right" style="color: #fff !important;">PROCEED TO CHECKOUT</button>
+                    <button onclick="checkoutClick();" class="btn btn-danger pull-right" style="color: #fff !important;">PROCEED TO CHECKOUT</button>
                 </div>
                 <div class="clearfix space10"></div>
                 <div class="space40"></div>
@@ -209,18 +209,6 @@
         </div>
     </div>
 </div>
-<div class="clearfix space20"></div>
-<script type="text/javascript">
-    function btnCheckoutClick() {
-        var cartSize = ${cartList.size()};
-        if (cartSize == 0) {
-            $("#error").html("<div class=\"alert alert-danger\">\n"
-                    + "<strong>You have no item in cart!</strong> \n"
-                    + "</div>");
-        } else {
-            window.location = "orders/checkout.html";
-        }
-    }
-</script>
+<div class="clearfix space20"></div> 
 <!-- MODAL -->
 <jsp:include page="../blocks/modal.jsp" flush="true" />

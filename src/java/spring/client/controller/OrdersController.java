@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +15,6 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +47,16 @@ public class OrdersController {
     OrderStateLessBeanLocal orderStateLessBean = lookupOrderStateLessBeanLocal();
 
     @ResponseBody
+    @RequestMapping(value = "ajax/getSession", method = RequestMethod.GET)
+    public String ajaxGetSession(HttpServletRequest request) {
+        String emailUser = (String) request.getSession().getAttribute("emailUser");
+        if (emailUser == null || emailUser.equals("")) {
+            return "0";
+        }
+        return "1";
+    }
+
+    @ResponseBody
     @RequestMapping(value = "ajax/addtocart", method = RequestMethod.POST)
     public String ajaxAddtocart(@RequestParam("productID") Integer productID,
               @RequestParam("sizeID") Integer sizeID,
@@ -77,7 +84,7 @@ public class OrdersController {
     @RequestMapping(value = "checkout", method = RequestMethod.GET)
     public String checkout(ModelMap model, HttpServletRequest request) {
         String email = (String) request.getSession().getAttribute("emailUser");
-        if (email == null) {
+        if (email == null || orderStateFulBean.showCart().size() == 0) {
             return "redirect:/index.html";
         } else {
             Users users = usersStateLessBean.findUserByEmail(email);
@@ -86,8 +93,9 @@ public class OrdersController {
             } else {
                 //2 dòng này thêm để render ra menu chính
                 List<Categories> cateList = productStateLessBean.categoryList();
+                model.addAttribute("emailU", users);
                 model.addAttribute("cateList", cateList);
-                model.addAttribute("userAddressList", users.getUserAddressList());
+                model.addAttribute("userAddressList", userAddressesStateLessBean.AddressListUser(users.getUserID()));
                 model.addAttribute("cartList", orderStateFulBean.showCart());
                 model.addAttribute("grandTotal", orderStateFulBean.subTotal());
                 return "client/pages/checkout";
@@ -102,16 +110,16 @@ public class OrdersController {
         String email = (String) request.getSession().getAttribute("emailUser");
         Users users = usersStateLessBean.findUserByEmail(email);
         String discountCode = request.getParameter("discount-code-input");
+        String addressSize = request.getParameter("addressSize");
         DiscountVoucher discountVoucher = null;
         if (discountCode != null) {
             discountVoucher = orderStateLessBean.getDiscountVoucherByID(discountCode);
         }
         String note = request.getParameter("note");
-        if (addressChoice.equals("difference")) {
+        if (addressSize.equals("0")) {
             String firstname = request.getParameter("diffFirstname");
             String lastname = request.getParameter("diffLastname");
             String address = request.getParameter("diffAddress");
-//            String province = request.getParameter("diffProvince");
             String phone = request.getParameter("diffPhone");
             Orders orders = new Orders();
             orders.setUser(users);
@@ -129,12 +137,11 @@ public class OrdersController {
             orders.setStatus(Short.parseShort("2"));
             success_orderID = orderStateFulBean.completePurchase(orders);
         } else {
-            UserAddresses userAddresses = userAddressesStateLessBean.findAddressID(Integer.parseInt(addressChoice));
-            if (userAddresses != null) {
-                String firstname = users.getFirstName();
-                String lastname = users.getLastName();
-                String address = userAddresses.getAddress();
-                String phone = userAddresses.getPhoneNumber();
+            if (addressChoice.equals("difference")) {
+                String firstname = request.getParameter("diffFirstname");
+                String lastname = request.getParameter("diffLastname");
+                String address = request.getParameter("diffAddress");
+                String phone = request.getParameter("diffPhone");
                 Orders orders = new Orders();
                 orders.setUser(users);
                 orders.setOrdersDate(new Date());
@@ -151,7 +158,30 @@ public class OrdersController {
                 orders.setStatus(Short.parseShort("2"));
                 success_orderID = orderStateFulBean.completePurchase(orders);
             } else {
-                return "redirect:/orders/checkout.html";
+                UserAddresses userAddresses = userAddressesStateLessBean.findAddressID(Integer.parseInt(addressChoice));
+                if (userAddresses != null) {
+                    String firstname = users.getFirstName();
+                    String lastname = users.getLastName();
+                    String address = userAddresses.getAddress();
+                    String phone = userAddresses.getPhoneNumber();
+                    Orders orders = new Orders();
+                    orders.setUser(users);
+                    orders.setOrdersDate(new Date());
+                    orders.setReceiverFirstName(firstname);
+                    orders.setReceiverLastName(lastname);
+                    orders.setPhoneNumber(phone);
+                    orders.setDeliveryAddress(address);
+                    if (discountVoucher != null) {
+                        orders.setVoucher(discountVoucher);
+                    } else {
+                        orders.setVoucher(null);
+                    }
+                    orders.setNote(note);
+                    orders.setStatus(Short.parseShort("2"));
+                    success_orderID = orderStateFulBean.completePurchase(orders);
+                } else {
+                    return "redirect:/orders/checkout.html";
+                }
             }
         }
         if (success_orderID.equals("000")) {
@@ -188,6 +218,7 @@ public class OrdersController {
 
     @RequestMapping(value = "updatecart", method = RequestMethod.POST)
     public String updatecart(ModelMap model, HttpServletRequest request, RedirectAttributes flashAttr) {
+        String error = "";
         for (CartLineInfo cartLineInfo : orderStateFulBean.showCart()) {
             String codeIdentify = cartLineInfo.getProduct().getProductID() + "-"
                       + cartLineInfo.getSizesByColor().getSizeID() + "-"
@@ -195,13 +226,27 @@ public class OrdersController {
             if (request.getParameter(codeIdentify) != null) {
                 CartLineInfo oldCartLineInfo = cartLineInfo;
                 cartLineInfo.setQuantity(Integer.parseInt(request.getParameter(codeIdentify)));
-                orderStateFulBean.updateProduct(oldCartLineInfo, cartLineInfo);
+                SizesByColor sizesByColor = orderStateLessBean.getSizesByColorBySizeIDandColorID(cartLineInfo.getSizesByColor().getSizeID(), cartLineInfo.getSizesByColor().getColor().getColorID());
+                if (sizesByColor != null) {
+                    if (sizesByColor.getQuantity() < Integer.parseInt(request.getParameter(codeIdentify))) {
+                        error += " " + sizesByColor.getColor().getProduct().getProductName() + "  ";
+                    } else {
+                        orderStateFulBean.updateProduct(oldCartLineInfo, cartLineInfo);
+                    }
+                }
             }
         }
-        flashAttr.addFlashAttribute("error", "<div class=\"alert alert-success\">\n"
-                  + "<strong>UPDATE CART SUCCESSFULLY</strong>\n"
-                  + "</div>");
-        return "redirect:/orders/shoppingcart.html";
+        if (error.equals("")) {
+            flashAttr.addFlashAttribute("error", "<div class=\"alert alert-success\">\n"
+                      + "<strong>UPDATE CART SUCCESSFULLY</strong>\n"
+                      + "</div>");
+            return "redirect:/orders/shoppingcart.html";
+        } else {
+            flashAttr.addFlashAttribute("error", "<div class=\"alert alert-danger\">\n"
+                      + "<strong>PRODUCT" + error + " OUT OF STOCK</strong>\n"
+                      + "</div>");
+            return "redirect:/orders/shoppingcart.html";
+        }
     }
 
     @RequestMapping(value = "deleteitemCart/{productid}/{sizeID}/{colorID}", method = RequestMethod.GET)
@@ -240,7 +285,22 @@ public class OrdersController {
         if (email == null) {
             return "redirect:/index.html";
         }
+        model.addAttribute("orderStatus", 4);
         model.addAttribute("orderList", orderStateLessBean.getAllOrderByUserID(usersStateLessBean.findUserByEmail(email).getUserID()));
+        //2 dòng này thêm để render ra menu chính
+        List<Categories> cateList = productStateLessBean.categoryList();
+        model.addAttribute("cateList", cateList);
+        return "client/pages/order-history";
+    }
+
+    @RequestMapping(value = "order-history/{status}")
+    public String orderhistoryByStatus(ModelMap model, HttpServletRequest request, @PathVariable("status") Integer status) {
+        String email = (String) request.getSession().getAttribute("emailUser");
+        if (email == null) {
+            return "redirect:/index.html";
+        }
+        model.addAttribute("orderStatus", status);
+        model.addAttribute("orderList", orderStateLessBean.getAllOrderByUserIDAndStatus(usersStateLessBean.findUserByEmail(email).getUserID(), status));
         //2 dòng này thêm để render ra menu chính
         List<Categories> cateList = productStateLessBean.categoryList();
         model.addAttribute("cateList", cateList);
@@ -288,8 +348,15 @@ public class OrdersController {
             subTotal = orderStateFulBean.subTotal();
             cartSize = orderStateFulBean.showCart().size();
             str_cart_button = "<div class=\"cart-btn\">\n"
-                      + "                                <a href=\"orders/shoppingcart.html\">View Bag</a>\n"
-                      + "                                <a href=\"orders/checkout.html\">Checkout</a>\n"
+                      + "                                <a href=\"orders/shoppingcart.html\">VIEW BAG</a>\n"
+                      + "                                <button onclick=\"checkoutClick();\" style=\"background: #d6644a;\n"
+                      + "                                font-size: 11px;\n"
+                      + "                                color: #fff;\n"
+                      + "                                text-transform: none;\n"
+                      + "                                height: 33px;\n"
+                      + "                                padding: 0 17px;\n"
+                      + "                                line-height: 33px;\n"
+                      + "                                font-weight: 700;\" class=\"btn\">CHECKOUT</button> \n"
                       + "                            </div>";
             str_subtotal = "<div class=\"ci-total\">Subtotal: $" + subTotal + "</div>";
             for (CartLineInfo cartLineInfo : orderStateFulBean.showCart()) {
@@ -297,11 +364,11 @@ public class OrdersController {
                           + "        <img src=\"assets/images/products/" + cartLineInfo.getProduct().getUrlImg() + "\" width=\"90\" alt=\"\"/>\n"
                           + "        <div class=\"ci-item-info\">\n"
                           + "            <h5>\n"
-                          + "                <a href=\"" + cartLineInfo.getProduct().getProductID() + "-" + cartLineInfo.getProduct().getProductColorList().get(0).getColorID() + "-" + cartLineInfo.getProduct().getProductNameNA() + ".html\">\n"
+                          + "                <a style=\"font-weight: 700;\" href=\"" + cartLineInfo.getProduct().getProductID() + "-" + cartLineInfo.getProduct().getProductColorList().get(0).getColorID() + "-" + cartLineInfo.getProduct().getProductNameNA() + ".html\">\n"
                           + "                    " + cartLineInfo.getProduct().getProductName() + "\n"
                           + "                </a>\n"
                           + "            </h5>\n"
-                          + "<p>&nbsp Size: " + cartLineInfo.getSizesByColor().getProductSize() + "\n"
+                          + "<p>&nbsp Color: " + cartLineInfo.getSizesByColor().getColor().getColor() + "\n"
                           + "                                            <img fs-color=\"" + cartLineInfo.getSizesByColor().getColor().getColorID() + "\" \n"
                           + "                                                 src=\"assets/images/products/colors/" + cartLineInfo.getSizesByColor().getColor().getUrlColorImg() + "\" \n"
                           + "                                                 class=\"img-responsive\" \n"
@@ -309,15 +376,14 @@ public class OrdersController {
                           + "                                                 title=\"" + cartLineInfo.getSizesByColor().getColor().getColor() + "\"\n"
                           + "                                                 style=\"width: 18px; height: 18px;\"/>\n"
                           + "                                        </p>"
-                          + "            <p>&nbsp " + cartLineInfo.getQuantity() + " &nbsp x $" + cartLineInfo.getProduct().getPrice() + "</p>\n"
-                          + "            <div class=\"ci-edit\">\n"
-                          + "                <!--<a href=\"#\" class=\"edit fa fa-edit\"></a>-->\n"
-                          + "                <button onclick=\"deleteItem(" + cartLineInfo.getProduct().getProductID() + "," + cartLineInfo.getSizesByColor().getSizeID() + "," + cartLineInfo.getSizesByColor().getColor().getColorID() + ");\" class=\"edit fa fa-trash\"></button>\n"
-                          + "            </div>\n"
+                          + "<p>Size: " + cartLineInfo.getSizesByColor().getProductSize() + "</p>\n"
+                          + " <p>Quantity: &nbsp " + cartLineInfo.getQuantity() + "</p>\n"
+                          + "            <p>Price: &nbsp $" + cartLineInfo.getProduct().getPrice() + "</p>\n"
                           + "        </div>\n"
                           + "    </div>";
             }
         }
+        //<div class=\"ci-edit\"><button onclick=\"deleteItem(" + cartLineInfo.getProduct().getProductID() + "," + cartLineInfo.getSizesByColor().getSizeID() + "," + cartLineInfo.getSizesByColor().getColor().getColorID() + ");\" class=\"edit fa fa-trash\"></button></div>\n"
         str_cart_big = "<span><i class=\"fa fa-shopping-cart\"></i></span>\n"
                   + "<div class=\"cart-info\">\n"
                   + "<small>You have <em class=\"highlight\">" + cartSize + " item(s)</em> in your shopping bag</small>\n"
@@ -338,16 +404,19 @@ public class OrdersController {
         if (discountVoucher != null) {
             if (discountCode.equals(discountVoucher.getVoucherID())) {
                 if (users != null) {
-                    for (Orders orders : users.getOrdersList()) {
-                        if (orders.getVoucher() != null) {
-                            if (discountVoucher.getVoucherID().equals(orders.getVoucher().getVoucherID())) { // da su dung voucher nay
-                                CheckoutResponse checkoutResponse = new CheckoutResponse();
-                                checkoutResponse.setStatus("4");
-                                try {
-                                    String result = mapper.writeValueAsString(checkoutResponse);
-                                    return result;
-                                } catch (JsonProcessingException ex) {
-                                    Logger.getLogger(OrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                    List<Users> userList = orderStateLessBean.getAllUserUseDiscountVoucherByVouID(discountVoucher.getVoucherID());
+                    if (userList != null) {
+                        if (userList.size() != 0) {
+                            for (Users user : userList) {
+                                if (user.getUserID() == users.getUserID()) { // da su dung voucher nay
+                                    CheckoutResponse checkoutResponse = new CheckoutResponse();
+                                    checkoutResponse.setStatus("4");
+                                    try {
+                                        String result = mapper.writeValueAsString(checkoutResponse);
+                                        return result;
+                                    } catch (JsonProcessingException ex) {
+                                        Logger.getLogger(OrdersController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 }
                             }
                         }

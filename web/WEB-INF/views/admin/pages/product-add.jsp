@@ -89,7 +89,7 @@
                         </div>
 
                         <div class="col-md-7">
-                            <div class="form-group">
+                            <div class="form-group text-right">
                                 <div class="form-group">
                                     <label for="description">Description</label>
                                     <textarea name="description" class="form-control" rows="5" id="fs-product-description"></textarea>
@@ -137,10 +137,8 @@
                                     <div class="form-group col-xs-2">
                                     </div>
 
-                                    <div class="col-xs-12 error">
-                                        <p class="fs-error-mess-size" style="color: red; margin-left: 15px"></p>
-                                        <p class="fs-error-mess-quantity" style="color: red; margin-left: 15px"></p>
-                                    </div>
+                                    <p class="fs-error-mess-size" style="color: red; margin-left: 15px"></p>
+                                    <p class="fs-error-mess-quantity" style="color: red; margin-left: 15px"></p>
                                 </div>
 
                                 <span class="fs-more-size"></span>

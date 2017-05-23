@@ -5,7 +5,6 @@
  */
 package spring.ejb;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -17,7 +16,6 @@ import spring.entity.ProductColors;
 import spring.entity.ProductRating;
 import spring.entity.ProductSubImgs;
 import spring.entity.Products;
-import spring.entity.ReturningVisitor;
 import spring.entity.SizesByColor;
 import spring.entity.SubCategories;
 
@@ -48,7 +46,6 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
 
     @Override
     public Categories findCategoryByID(int cateID) {
-        getEntityManager().refresh(getEntityManager().find(Categories.class, cateID));
         return getEntityManager().find(Categories.class, cateID);
     }
 
@@ -118,17 +115,6 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
         return errorCode;
     }
 
-    @Override
-    public boolean deleteCategory(int cateID) {
-        Categories cate = findCategoryByID(cateID);
-        if (cate != null) {
-            getEntityManager().remove(cate);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /*=======================================================================
      *                                                                       *
      *                       SUB-CATEGORY TREATMENT                          *
@@ -142,7 +128,6 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
 
     @Override
     public SubCategories findSubCategoryByID(int subCateID) {
-        getEntityManager().refresh(getEntityManager().find(SubCategories.class, subCateID));
         return getEntityManager().find(SubCategories.class, subCateID);
     }
 
@@ -160,7 +145,6 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
         } else {//=> Chưa có SubCategory trong Category đó.
             try {
                 getEntityManager().persist(newSubCate);
-                findCategoryByID(newSubCate.getCategory().getCateID()).getSubCateList().add(newSubCate);
                 errorCode = 1;
             } catch (Exception e) {
                 errorCode = 0;
@@ -181,22 +165,9 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
         if (count == 1) { //=> trùng
             if ((Objects.equals(oldSubCate.getCategory().getCateID(), targetSubCategory.getCategory().getCateID())) && oldSubCate.getSubCateName().equalsIgnoreCase(targetSubCategory.getSubCateName())) {
                 try {
-                    List<Products> oldPrdList = oldSubCate.getProductList();
-                    targetSubCategory.getProductList().addAll(oldPrdList);
-                    findCategoryByID(oldSubCate.getCategory().getCateID()).getSubCateList().remove(oldSubCate);
-                    findCategoryByID(targetSubCategory.getCategory().getCateID()).getSubCateList().add(targetSubCategory);
-
                     getEntityManager().merge(targetSubCategory);
-                    targetSubCategory.getProductList().addAll(oldPrdList);
-                    List<Products> prdList = targetSubCategory.getProductList();
-                    for (Products p : prdList) {
-                        p.setCategory(targetSubCategory.getCategory());
-                        getEntityManager().merge(p);
-                    }
-
                     errorCode = 1; //Update thành công.
                 } catch (Exception e) {
-                    e.printStackTrace();
                     errorCode = 0; //Update bị lỗi.
                 }
             } else {
@@ -204,38 +175,13 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
             }
         } else { //=> ko bị trùng
             try {
-                List<Products> oldPrdList = oldSubCate.getProductList();
-
-                findCategoryByID(oldSubCate.getCategory().getCateID()).getSubCateList().remove(oldSubCate);
-                findCategoryByID(targetSubCategory.getCategory().getCateID()).getSubCateList().add(targetSubCategory);
-
                 getEntityManager().merge(targetSubCategory);
-                targetSubCategory.getProductList().addAll(oldPrdList);
-                List<Products> prdList = targetSubCategory.getProductList();
-                for (Products p : prdList) {
-                    p.setCategory(targetSubCategory.getCategory());
-                    getEntityManager().merge(p);
-                }
                 errorCode = 1; //Update thành công.
             } catch (Exception e) {
-                e.printStackTrace();
                 errorCode = 0; //Update bị lỗi.
             }
         }
         return errorCode;
-    }
-
-    @Override
-    public boolean deleteSubCate(int subCateID) {
-        SubCategories subCate = findSubCategoryByID(subCateID);
-
-        if (subCate != null) {
-            getEntityManager().find(Categories.class, subCate.getCategory().getCateID()).getSubCateList().remove(subCate);
-            getEntityManager().remove(subCate);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /*========================================================================
@@ -262,10 +208,10 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
 
     @Override
     public List<Object> getTop3ProductBestSeller() {
-        String sql = "SELECT p.productID, p.productName, p.productNameNA, p.price, p.urlImg, c.colorID, sum(od.quantity) as tongsoluong "
-                + "FROM OrdersDetail od JOIN od.product p JOIN p.productColorList c "
-                + "WHERE p.status = 1 AND c.status = 1 "
-                + "GROUP BY p.productID, p.productName, p.productNameNA, p.price, p.urlImg, c.colorID "
+        String sql = "SELECT p.productID, p.productName, p.productNameNA, p.price, p.urlImg, sum(od.quantity) as tongsoluong "
+                + "FROM OrdersDetail od JOIN od.product p "
+                + "WHERE p.status = 1 "
+                + "GROUP BY p.productID, p.productName, p.productNameNA, p.price, p.urlImg "
                 + "ORDER BY tongsoluong DESC";
         Query q = getEntityManager().createQuery(sql).setMaxResults(3);
 
@@ -279,22 +225,7 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
 
         return q.getResultList();
     }
-    
-    @Override
-    public List<Object[]> getProductTop3Rated(){
-        String sql = "  SELECT "
-                + "r.productID, "
-                + "ROUND(AVG(CAST(r.rating AS FLOAT)), 1) as avrage, "
-                + "COUNT(r.productID) as numberOfRate "
-                + "FROM ProductRating r "
-                + "GROUP BY r.productID "
-                + "ORDER BY numberOfRate DESC, avrage DESC";
-        Query q = getEntityManager().createNativeQuery(sql);
-        q.setFirstResult(0);
-        q.setMaxResults(3);
-        return q.getResultList();
-    }
-    
+
     @Override
     public ProductColors findProductColorByColorID(int colorID) {
         ProductColors productColor = getEntityManager().find(ProductColors.class, colorID);
@@ -315,27 +246,13 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
     public boolean createNewProduct(Products newProduct) {
         try {
             getEntityManager().persist(newProduct);
-            findSubCategoryByID(newProduct.getSubCate().getSubCateID()).getProductList().add(newProduct);
             getEntityManager().flush();
             return true;
         } catch (Exception e) {
             return false;
         }
     }
-    
-    @Override
-    public boolean createNewProductColor(ProductColors newProductColors) {
-        try {
-            getEntityManager().persist(newProductColors);
-            findProductByID(newProductColors.getProduct().getProductID()).getProductColorList().add(newProductColors);
-            getEntityManager().flush();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
+
     @Override
     public void updateProductStatus(int productID, short productStatus) {
         Products targetProduct = findProductByID(productID);
@@ -530,7 +447,7 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
 
     @Override
     public boolean updateProductColorStatus(int colorID, short newStt) {
-        ProductColors targetColor = findProductColorByColorID(colorID);
+        ProductColors targetColor = getEntityManager().find(ProductColors.class, colorID);
 
         targetColor.setStatus(newStt);
 
@@ -589,9 +506,9 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
             return 2;
         }
     }
-
+    
     @Override
-    public SizesByColor getSizeByID(int sizeID) {
+    public SizesByColor getSizeByID(int sizeID){
         return getEntityManager().find(SizesByColor.class, sizeID);
     }
 
@@ -604,7 +521,7 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
             return false;
         }
     }
-
+    
     @Override
     public int deleteProductSize(int sizeID) {
         try {
@@ -636,98 +553,4 @@ public class ProductStateLessBean implements ProductStateLessBeanLocal {
             return false;
         }
     }
-    
-    @Override
-    public List<ProductColors> getProductColorsListOfAProductByName (int productID, String color){
-        String sql = "SELECT c FROM ProductColors c WHERE c.product.productID = :productID AND c.color LIKE :color";
-        Query q = getEntityManager().createQuery(sql, ProductColors.class);
-        q.setParameter("productID", productID);
-        q.setParameter("color", color);
-        
-        return q.getResultList();
-    }
-    
-    /* Returning Visitor */
-    @Override
-    public List<ReturningVisitor> getReturningVisitorList() {
-        String sql = "SELECT v FROM ReturningVisitor v";
-        Query q = getEntityManager().createQuery(sql, ReturningVisitor.class);
-
-        return q.getResultList();
-    }
-
-    @Override
-    public List<Object[]> getVisitTimesByMonthAndWeek(int month, String weekCondition) {
-        String sql = "SELECT r.onDate, sum(r.visitTimes) AS visits "
-                + "FROM ReturningVisitor r "
-                + "WHERE MONTH(r.onDate) = ? "
-                + weekCondition
-                + "GROUP BY r.onDate";
-        Query q = getEntityManager().createNativeQuery(sql);
-        q.setParameter(1, month);
-        return q.getResultList();
-    }
-
-    @Override
-    public void createNewVisitor(ReturningVisitor newVisitor) {
-        getEntityManager().persist(newVisitor);
-    }
-
-    @Override
-    public ReturningVisitor getReturningVisitorByIDAndDate(String visitorID, Date date) {
-        try {
-            String sql = "SELECT r FROM ReturningVisitor r "
-                    + "WHERE r.visitorID = :visitorID "
-                    + "AND r.onDate = :date";
-            Query q = getEntityManager().createQuery(sql, ReturningVisitor.class);
-            q.setParameter("visitorID", visitorID);
-            q.setParameter("date", date);
-            return (ReturningVisitor) q.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    
-    @Override
-    public void updateVisitTimes (ReturningVisitor visitor){
-        if(getEntityManager().find(ReturningVisitor.class, visitor.getReVisitID())!= null){
-            getEntityManager().merge(visitor);
-        }
-    }
-
-    @Override
-    public boolean addProductSubImage(ProductSubImgs newSubImg) {
-        try {
-            getEntityManager().find(ProductColors.class, newSubImg.getProductColor().getColorID()).getProductSubImgsList().add(newSubImg);
-            getEntityManager().persist(newSubImg);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean addSize(SizesByColor newSize) {
-        try {
-            findProductColorByColorID(newSize.getColor().getColorID()).getSizeList().add(newSize);
-            getEntityManager().persist(newSize);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-            
-        }
-    }
-
-    @Override
-    public List<Products> getSearchedProducts(String prodName) {
-        String sql = "SELECT p FROM Products p WHERE p.productName LIKE :keyword AND p.status = 1";
-        Query q = getEntityManager().createQuery(sql, Products.class);
-        q.setParameter("keyword", "%"+prodName+"%");
-        q.setFirstResult(0);
-        q.setMaxResults(6);
-        return q.getResultList();
-    }
-    
 }

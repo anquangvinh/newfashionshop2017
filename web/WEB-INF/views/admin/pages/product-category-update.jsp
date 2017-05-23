@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!-- Page Content -->
 <div id="page-wrapper">
-    <div class="container-fluid" id="fs-update-category-admin-page" fs-category-id="${targetCate.cateID}">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header"> 
@@ -21,15 +21,15 @@
                     <div>
                         ${error}
                     </div>
-                    <form:form id="fs-form-update-category" method="POST" action="" modelAttribute="targetCate">
+                    <form:form method="POST" action="" modelAttribute="targetCate">
                         <div class="form-group">
                             <label>Category</label>
                             <form:input path="cateName" cssClass="form-control" placeholder="Enter Product Category Name" />
                             <!--Error Message-->
-                            <p class="help-block" id="fs-cate-name-err-mes"></p>
+<!--                            <p class="help-block">Error Message will be here!!!</p>-->
                         </div>
 
-                        <button type="submit" class="btn btn-warning" id="fs-btn-update-category">Update</button>
+                        <button type="submit" class="btn btn-warning">Update</button>
                         <button type="reset" class="btn btn-default">Reset</button>
                     </form:form>
                 </div>

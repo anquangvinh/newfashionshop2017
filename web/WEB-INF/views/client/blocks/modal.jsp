@@ -25,8 +25,7 @@
                         </div>
 
                         <div class="ps-stock">
-                            Available: <span style="color: #d6644a" class="fs-quantity-in-stock">---</span>
-                            <div class="fs-display-none" id="fs-show-quantity"></div>
+                            Available: <a href="#">In Stock</a>
                         </div>
                         <div class="sep"></div>
                         <div class="ps-color fs-product-modal-color">
@@ -54,10 +53,10 @@
                                         </button>
                                     </span>
 
-                                    <input type="text" name="" class="form-control fs-modal-input-number text-center" value="1" min="1" max="10" disabled>
+                                    <input type="text" name="" class="form-control fs-modal-input-number text-center" value="1" min="1" max="10">
 
                                     <span class="input-group-btn">
-                                        <button type="button" disabled class="btn btn-success fs-modal-btn-number fs-modal-btn-quantity-plus" data-type="plus">
+                                        <button type="button" class="btn btn-success fs-modal-btn-number fs-modal-btn-quantity-plus" data-type="plus" >
                                             <span class="glyphicon glyphicon-plus"></span>
                                         </button>
                                     </span>

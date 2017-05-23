@@ -8,9 +8,7 @@ package spring.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -64,17 +62,7 @@ public class SubCategories implements Serializable {
     public List<Products> getProductList() {
         return productList;
     }
-    
-    public List<Products> getProductListWorking(){
-        List<Products> productListWorking = new ArrayList<>();
-        for (Products p : productList) {
-            if(p.getStatus() == 1){
-                productListWorking.add(p);
-            }
-        }
-        return productListWorking;
-    }
-    
+
     public void setProductList(List<Products> productList) {
         this.productList = productList;
     }

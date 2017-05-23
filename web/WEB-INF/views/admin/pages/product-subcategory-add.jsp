@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!-- Page Content -->
 <div id="page-wrapper">
-    <div class="container-fluid" id="fs-create-sub-category-admin-page">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
 
@@ -25,21 +25,21 @@
                     <form:form method="POST" action="" modelAttribute="subCategory">
                         <div class="form-group">
                             <label>Category</label>
-                            <form:select id="fs-select-category" path="category.cateID" cssClass="form-control">
+                            <form:select path="category.cateID" cssClass="form-control">
                                 <form:option value="0">--- Please Select ---</form:option>
                                 <form:options items="${categories}"  itemValue="cateID" itemLabel="cateName" />
                             </form:select>
-                            <p class="help-block" id="fs-sub-cate-err-mes"></p>    
+
                         </div>
                         <div class="form-group">
                             <label>Sub-Category</label>
-                            <form:input disabled="true" path="subCateName" cssClass="form-control" placeholder="Choose Category first!"/>
+                            <form:input path="subCateName" cssClass="form-control" placeholder="Enter Sub-Category Name"/>
 
                             <!--Error Message-->
-                            <p class="help-block" id="fs-sub-cate-name-err-mes"></p>
+                            <!--                            <p class="help-block">Error Message will be here!!!</p>-->
                         </div>
 
-                        <button type="submit" class="btn btn-success" id="fs-btn-create-subCategory">Create</button>
+                        <button type="submit" class="btn btn-success">Create</button>
                         <button type="reset" class="btn btn-default">Reset</button>
                     </form:form>
                 </div>

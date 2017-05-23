@@ -45,7 +45,7 @@ public class Orders implements Serializable {
     @JsonBackReference
     private DiscountVoucher voucher;
     
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrdersDetail> orderDetailList;
     

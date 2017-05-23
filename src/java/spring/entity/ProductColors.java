@@ -8,7 +8,6 @@ package spring.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -102,23 +101,6 @@ public class ProductColors implements Serializable {
             }            
         });
         return sizeList;
-    }
-    
-    public List<SizesByColor> getSizeListWorking() {
-        List<SizesByColor> sizeListWorking = new ArrayList<>();
-        
-        for (SizesByColor p : sizeList) {
-            if(p.getStatus() == 1){
-                sizeListWorking.add(p);
-            }
-        }
-        Collections.sort(sizeListWorking, new Comparator<SizesByColor>(){
-            @Override
-            public int compare(SizesByColor s1, SizesByColor s2) {
-                return s1.getSizeOrder() - s2.getSizeOrder();
-            }            
-        });
-        return sizeListWorking;
     }
 
     public void setSizeList(List<SizesByColor> sizeList) {

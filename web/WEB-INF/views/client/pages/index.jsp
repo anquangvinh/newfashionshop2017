@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- SLIDER -->
 <div class="slider-wrap">
@@ -181,7 +180,7 @@
             <div class="block-content">
                 <img src="assets/images/blocks/1.jpg" class="img-responsive" alt=""/>
                 <div class="bs-text-down text-center hvr-outline-out">
-                    Menswear<span>Intimates Fall/Winter 2017</span>				
+                    Menswear<span>Intimates Fall/Winter 2015</span>				
                 </div>
             </div>
         </div>
@@ -225,20 +224,21 @@
                         <div class="isotope-item ${cate.cateName} <c:if test="${no.index % 2 == 0}">isotope_to_all</c:if>">
                                 <div class="product-item">
                                     <div class="item-thumb">
-                                    <c:if test="${product.productDiscount > 0}">
-                                        <div class="badge offer">-${product.productDiscount}%</div>
-                                    </c:if>
-                                    <img src="assets/images/products/${product.urlImg}"
+                                        <!-- <div class="badge new">New</div>-->
+                                        <img src="assets/images/products/${product.urlImg}"
                                          class="img-responsive" 
                                          alt="${product.urlImg}"
                                          fs-product-for-img="${product.productID}"/>
                                     <div class="overlay-rmore fa fa-search quickview fs-product-modal" 
                                          fs-product="${product.productID}" 
-                                         fs-product-modal-color="${product.productColorListWorking[0].colorID}" 
+                                         fs-product-modal-color="${product.productColorList[0].colorID}" 
                                          data-toggle="modal" >
+                                        <!--                                         data-target="#productModal"-->
+
                                     </div>
                                     <div class="product-overlay">
-                                        <a href="#" class="addcart fa fa-shopping-cart"></a>
+<!--                                        <a href="#" class="addcart fa fa-shopping-cart"></a>
+                                        <a href="#" class="compare fa fa-signal"></a>-->
                                         <a class="likeitem fa fa-heart-o fs-wishlish-add" 
                                            fs-userID="${sessionScope.findUsersID}" 
                                            fs-productID="${product.productID}" ></a>
@@ -247,23 +247,14 @@
                                 </div>
                                 <div class="product-info">
                                     <h4 class="product-title">
-                                        <a href="${product.productID}-${product.productColorListWorking[0].colorID}-${product.productNameNA}.html">
+                                        <a href="${product.productID}-${product.productColorList[0].colorID}-${product.productNameNA}.html">
                                             ${product.productName}
                                         </a>
                                     </h4>
-                                    <span class="product-price">
-                                        <c:if test="${product.productDiscount > 0}">
-                                            <small class="cutprice">$ ${product.price}0 </small>  $
-                                            <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.price - (product.price*product.productDiscount/100)}" var="prodPrice"/>
-                                            ${fn:replace(prodPrice, ",", ".")}
-                                        </c:if>
-                                        <c:if test="${product.productDiscount == 0}">
-                                            $ ${product.price}0
-                                        </c:if>
-                                    </span>
+                                    <span class="product-price">$ ${product.price}0</span>
                                     <div class="item-colors" style="height: 25px;">
-                                        <c:if test="${product.productColorListWorking.size() > 1}">
-                                            <c:forEach items="${product.productColorListWorking}" var="color" begin="0" end="4">
+                                        <c:if test="${product.productColorList.size() > 1}">
+                                            <c:forEach items="${product.productColorList}" var="color" begin="0" end="4">
                                                 <img src="assets/images/products/colors/${color.urlColorImg}" 
                                                      class="img-responsive fs-index-color-img" 
                                                      fs-index-color-img="${color.colorID}" 
@@ -357,17 +348,15 @@
                         <div class="pc-wrap">
                             <div class="product-item">
                                 <div class="item-thumb">
-                                    <c:if test="${ltp.productDiscount > 0}">
-                                        <div class="badge offer">-${ltp.productDiscount}%</div>
-                                    </c:if>
                                     <img src="assets/images/products/${ltp.urlImg}" 
                                          class="img-responsive" 
                                          alt="${ltp.urlImg}" 
                                          fs-product-for-img="${ltp.productID}"/>
                                     <div class="overlay-rmore fa fa-search quickview fs-product-modal" 
                                          fs-product="${ltp.productID}" 
-                                         fs-product-modal-color="${ltp.productColorListWorking[0].colorID}" 
+                                         fs-product-modal-color="${ltp.productColorList[0].colorID}" 
                                          data-toggle="modal" ></div>
+                                    <!--                                     data-target="#productModal"-->
                                     <div class="product-overlay">
                                         <a href="#" class="addcart fa fa-shopping-cart"></a>
                                         <a href="#" class="compare fa fa-signal"></a>
@@ -378,26 +367,14 @@
                                 </div>
                                 <div class="product-info">
                                     <h4 class="product-title">
-                                        <a href="${ltp.productID}-${ltp.productColorListWorking[0].colorID}-${ltp.productNameNA}.html">
+                                        <a href="${ltp.productID}-${ltp.productColorList[0].colorID}-${ltp.productNameNA}.html">
                                             ${ltp.productName}
                                         </a>
                                     </h4>
-
-                                    <span class="product-price">
-                                        <c:if test="${ltp.productDiscount > 0}">
-                                            <small class="cutprice">$ ${ltp.price}0 </small>  $
-                                            <fmt:formatNumber type="number" maxFractionDigits="2" value="${ltp.price - (ltp.price*ltp.productDiscount/100)}" var="ltpPrice"/>
-                                            ${fn:replace(ltpPrice, ",", ".")}
-
-                                        </c:if>
-                                        <c:if test="${ltp.productDiscount == 0}">
-                                            $ ${ltp.price}0
-                                        </c:if>
-                                    </span>
-
+                                    <span class="product-price">$${ltp.price}0 </span>
                                     <div class="item-colors">
-                                        <c:if test="${ltp.productColorListWorking.size() > 1}">
-                                            <c:forEach items="${ltp.productColorListWorking}" var="color">
+                                        <c:if test="${ltp.productColorList.size() > 1}">
+                                            <c:forEach items="${ltp.productColorList}" var="color">
                                                 <img src="assets/images/products/colors/${color.urlColorImg}" 
                                                      class="img-responsive fs-index-color-img" 
                                                      fs-index-color-img="${color.colorID}" 
@@ -442,11 +419,7 @@
                                         <img src="assets/images/products/${prod[4]}" alt="${prod[4]}"/>
                                     </div>
                                     <div class="fw-info">
-                                        <h4>
-                                            <a href="${prod[0]}-${prod[5]}-${prod[2]}.html">
-                                                ${prod[1]}
-                                            </a>
-                                        </h4>
+                                        <h4><a href="./single-product.html">${prod[1]}</a></h4>
                                         <span class="fw-price">$ ${prod[3]}0</span>
                                     </div>
                                 </li>
@@ -464,11 +437,7 @@
                                         <img src="assets/images/products/${prod.urlImg}" alt="${prod.urlImg}"/>
                                     </div>
                                     <div class="fw-info">
-                                        <h4>
-                                            <a href="${prod.productID}-${prod.productColorListWorking[0].colorID}-${prod.productNameNA}.html">
-                                                ${prod.productName}
-                                            </a>
-                                        </h4>
+                                        <h4><a href="wait.html">${prod.productName}</a></h4>
                                         <span class="fw-price">$ ${prod.price}0</span>
                                     </div>
                                 </li>
@@ -478,31 +447,10 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <h6>Top Rated</h6>
+                    <h6>Recent Products</h6>
                     <div class="f-widget-content">
                         <ul id="fs-recent-product-index-page">
-                            <c:forEach items="${productTopRateList}" var="prod" varStatus="ind">
-                                <li>
-                                    <div class="fw-thumb">
-                                        <img src="assets/images/products/${prod[0].urlImg}" alt="${prod[0].urlImg}"/>
-                                    </div>
-                                    <div class="fw-info">
-                                        <h4>
-                                            <a href="${prod[0].productID}-${prod[0].productColorListWorking[0].colorID}-${prod[0].productNameNA}.html">
-                                                ${prod[0].productName}
-                                            </a>
-                                        </h4>
-                                        <select id="fs-index-top-rating-result-${ind.index}" data-current-rating="${prod[1]}">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
-                                        <span class="fw-price">$ ${prod[0].price}0</span>
-                                    </div>
-                                </li>
-                            </c:forEach>
+
                         </ul>
                     </div>
                 </div>
@@ -524,16 +472,16 @@
             </div>
         </div>
     </div>
-
-
+    
+    
     <!--MODAL THONG BAO THANH CONG-->
-    <!--    <div id="fs-wl-ajax-error" class="modal fade" >
-        <div class="modal-header">
-          <button class="close" data-dismiss="modal">&times;</button>
-          <h3>SUCCESS</h3>
-        </div>
-        <div class="modal-body">
-          <p>Add Wish List success.</p>
-        </div>
-      </div>
-      <div class="ajax-progress"></div>-->
+<!--    <div id="fs-wl-ajax-error" class="modal fade" >
+    <div class="modal-header">
+      <button class="close" data-dismiss="modal">&times;</button>
+      <h3>SUCCESS</h3>
+    </div>
+    <div class="modal-body">
+      <p>Add Wish List success.</p>
+    </div>
+  </div>
+  <div class="ajax-progress"></div>-->

@@ -176,23 +176,7 @@ public class Products implements Serializable {
         });
         return productColorList;
     }
-    
-    public List<ProductColors> getProductColorListWorking(){
-        List<ProductColors> productRatingWorking = new ArrayList<>();
-        for (ProductColors p : productColorList) {
-            if(p.getStatus() == 1){
-                productRatingWorking.add(p);
-            }
-        }
-        Collections.sort(productRatingWorking, new Comparator<ProductColors>(){
-            @Override
-            public int compare(ProductColors p1, ProductColors p2) {
-                return p1.getColorOrder() - p2.getColorOrder();
-            }            
-        });
-        return productRatingWorking;
-    }
-    
+
     public void setProductColorList(List<ProductColors> productColorList) {
         this.productColorList = productColorList;
     }

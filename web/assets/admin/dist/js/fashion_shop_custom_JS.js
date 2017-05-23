@@ -7,548 +7,14 @@
  */
 
 $(document).ready(function () {
-    /* Cấu hình cho datatable */
+    /*    
+     * Cấu hình cho datatable
+     */
     $('#dataTables-example').DataTable({
         responsive: true
     });
 
-    setTimeout(function () {
-        $("#fs-error-div").hide("fade", 1500);
-    }, 3000);
     /*==============================VINH - PRODUCT============================*/
-    /* Pie chart returning visitor */
-//    $.ajax({
-//        url: "admin/ajax/getReturningVisitorData.html",
-//        data: "",
-//        method: "POST",
-//        success: function (response) {
-//            var arrResult = response.split("-");
-//            var newVisitor = arrResult[0];
-//            var returnVisitor = arrResult[1];
-//            var dataSet = [
-//                {label: " Returning Visitors", data: returnVisitor, color: "#A0D468"},
-//                {label: " New Visitors", data: newVisitor, color: "#FFCE55"},
-//            ];
-//
-//            var chartOption = {
-//                series: {
-//                    pie: {
-//                        show: true,
-//                        label: {
-//                            show: true,
-//                            radius: 0.8,
-//                            formatter: function (label, series) {
-//                                return '<div style="border:1px solid grey;font-size:11pt;text-align:center;padding:5px;color:white;">' +
-//                                        label + ' : ' +
-//                                        Math.round(series.percent) +
-//                                        '%</div>';
-//                            },
-//                            background: {
-//                                opacity: 0.8,
-//                                color: '#000'
-//                            }
-//                        }
-//                    }
-//                },
-//                legend: {
-//                    show: false
-//                },
-//                grid: {
-//                    hoverable: true
-//                }
-//            };
-//            $.plot($("#fs-pie-chart-returning-visitor"), dataSet, chartOption);
-//            $("#fs-pie-chart-returning-visitor").showMemo();
-//        }
-//    });
-//    $.fn.showMemo = function () {
-//        $(this).bind("plothover", function (event, pos, item) {
-//            if (!item) {
-//                return;
-//            }
-//            var html = "";
-//            var percent = parseFloat(item.series.percent).toFixed(2);
-//
-//            html += "<div class=\"panel-body\" style=\"background-color:" + item.series.color + "\">\n\
-//                                <span style=\"color:white\">" + item.series.label + ": " + item.series.data[0][1] + " (" + percent + "%)</span>\n\
-//                            </div>";
-//            $("#flot-memo").html(html);
-//        });
-//    };
-//    /* Bar chart */
-//    $.ajax({
-//        url: "admin/ajax/getVisitTimes.html",
-//        method: "POST",
-//        success: function (response) {
-//            console.log(response)
-//            var data2 = [{
-//                    color: "#2dc3e8",
-//                    label: "Referral Visits",
-//                    data: [[1495299600000,6],[1495386000000,5]],
-//                    bars: {
-//                        order: 1,
-//                        show: true,
-//                        borderWidth: 0,
-//                        barWidth: 24*60*60*100,
-//                        lineWidth: .5,
-//                        fillColor: {
-//                            colors: [{
-//                                    opacity: 0.4
-//                                }, {
-//                                    opacity: 1
-//                                }]
-//                        }
-//                    }
-//                }, 
-////                {
-////                    color: "#fb6e52",
-////                    label: "Direct Visits",
-////                    data: [[3, 2], [4, 5], [5, 4], [6, 11], [7, 12], [8, 11], [9, 8]],
-////                    lines: {
-////                        show: true,
-////                        fill: true,
-////                        lineWidth: 1,
-////                        fillColor: {
-////                            colors: [{
-////                                    opacity: 0
-////                                }, {
-////                                    opacity: 0.3
-////                                }]
-////                        }
-////                    },
-////                    points: {
-////                        show: true
-////                    },
-////                    shadowSize: 0
-////                },
-//            ];
-//
-//            var options = {
-//                legend: {
-//                    show: true,
-//                    labelFormatter: function (label, series) {
-//                        return '<div style="color:black; margin-left: 5px; font-size:13px">' + label + '</div>';
-//                    },
-//                    labelBoxBorderColor: "#2dc3e8"
-//                },
-//                xaxis: {
-//                    show: true,
-//                    mode: "time",
-//                    timeformat: "%d/%m/%Y",
-//                    axisLabel: "2017",
-//                    axisLabelUseCanvas: true,
-//                    axisLabelFontSizePixels: 15,
-//                    axisLabelPadding: 10,
-//                    //tickDecimals: 0,
-//                    color: '#f3f3f3',
-//                    font: {
-//                        size: 13,
-//                        lineHeight: 13,
-//                        family: "sans-serif",
-//                        variant: "small-caps",
-//                        color: "#545454"
-//                    },
-//                    ticks: function(axis){
-//                        return axis.max - axis.min;
-//                    }
-//                },
-//                yaxis: {
-//                    show: true,
-//                    axisLabel: "Visits",
-//                    axisLabelUseCanvas: true,
-//                    axisLabelFontSizePixels: 15,
-//                    axisLabelPadding: 10,
-//                    min: 0,
-//                    color: '#f3f3f3',
-//                    font: {
-//                        size: 13,
-//                        lineHeight: 13,
-//                        family: "sans-serif",
-//                        variant: "small-caps",
-//                        color: "#545454"
-//                    },
-//                },
-//                grid: {
-//                    hoverable: true,
-//                    clickable: false,
-//                    borderWidth: 0,
-//                    aboveData: false,
-//                    color: '#fbfbfb'
-//
-//                },
-//                tooltip: true,
-//                tooltipOpts: {
-//                    cssClass: 'myflotTip',
-//                    defaultTheme: false,
-//                    content: " <b>%x </b> , <b>%s</b> : <span>%y</span>",
-//                }
-//            };
-//            var placeholder = $("#fs-visits-bar-chart");
-//            var plot = $.plot(placeholder, data2, options);
-//        }
-//    });
-
-
-
-    /* PRODUCT CATEGORY - SUBCATEGORY */
-    /* Validation Create Category */
-    $("#fs-category-add-page").on("keyup", "#cateName", function () {
-        var cateName = $(this).val().trim();
-        if (cateName == "") {
-            $("#fs-cate-name-err-mes").text("Category cannot be empty!");
-        } else if (!isNaN(cateName.charAt(0))) {
-            $("#fs-cate-name-err-mes").text("Category cannot begin with a number!");
-        } else if (cateName.length < 3 || cateName.length > 11) {
-            $("#fs-cate-name-err-mes").text("Category has 3 - 11 characters!");
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDupCategory.html",
-                method: "POST",
-                data: {cateName: cateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#fs-cate-name-err-mes").text("Duplicate Category!, Please change another one!");
-                    } else {
-                        $("#fs-cate-name-err-mes").text("");
-                    }
-                }
-            });
-        }
-    });
-
-    $("#fs-category-add-page").on("click", "#fs-btn-create-category", function (e) {
-        e.preventDefault();
-        var cateName = $("#cateName").val().trim();
-        if (cateName == "") {
-            $("#fs-cate-name-err-mes").text("Category cannot be empty!");
-            $("#cateName").focus();
-        } else if (!isNaN(cateName.charAt(0))) {
-            $("#fs-cate-name-err-mes").text("Category cannot begin with a number!");
-            $("#cateName").focus();
-        } else if (cateName.length < 3 || cateName.length > 11) {
-            $("#fs-cate-name-err-mes").text("Category has 3 - 11 characters!");
-            $("#cateName").focus();
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDupCategory.html",
-                method: "POST",
-                data: {cateName: cateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#fs-cate-name-err-mes").text("Duplicate Category!, Please change another one!");
-                        $("#cateName").focus();
-                    } else {
-                        $("form#newCate").submit();
-                    }
-                }
-            });
-
-        }
-    });
-
-    /* Validation Create SubCategory */
-    $("#fs-create-sub-category-admin-page").on("change", "#fs-select-category", function () {
-        var cateID = $(this).val();
-        console.log(cateID);
-        if (cateID != 0) {
-            $("#fs-sub-cate-err-mes").text("");
-            $("#subCateName").removeAttr("disabled");
-            $("#subCateName").attr("placeholder", "Enter Sub-Category Name");
-        } else {
-            $("#subCateName").attr("disabled", "true");
-            $("#subCateName").attr("placeholder", "Choose Category first!");
-        }
-    });
-
-    $("#fs-create-sub-category-admin-page").on("keyup", "#subCateName", function () {
-        var subCateName = $(this).val().trim();
-        var cateID = $("#fs-select-category").val();
-
-        if (subCateName == "") {
-            $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot be empty!");
-        } else if (!isNaN(subCateName.charAt(0))) {
-            $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot begin with a number!");
-        } else if (subCateName.length < 3 || subCateName.length > 11) {
-            $("#fs-sub-cate-name-err-mes").text("Sub-Category has 3 - 11 characters!");
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDupSubCategory.html",
-                method: "POST",
-                data: {cateID: cateID, subCateName: subCateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#fs-sub-cate-name-err-mes").text("Duplicate Category!, Please change another one!");
-                    } else {
-                        $("#fs-sub-cate-name-err-mes").text("");
-                    }
-                }
-            });
-        }
-    });
-
-    $("#fs-create-sub-category-admin-page").on("click", "#fs-btn-create-subCategory", function (e) {
-        e.preventDefault();
-        var cateID = $("#fs-select-category").val();
-
-        if (cateID == 0) {
-            $("#fs-select-category").focus();
-            $("#fs-sub-cate-err-mes").text("Please choose a Category!");
-        } else {
-            var subCateName = $("#subCateName").val().trim();
-
-            if (subCateName == "") {
-                $("#subCateName").focus();
-                $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot be empty!");
-            } else if (!isNaN(subCateName.charAt(0))) {
-                $("#subCateName").focus();
-                $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot begin with a number!");
-            } else if (subCateName.length < 3 || subCateName.length > 11) {
-                $("#subCateName").focus();
-                $("#fs-sub-cate-name-err-mes").text("Sub-Category has 3 - 11 characters!");
-            } else {
-                $.ajax({
-                    url: "admin/ajax/checkDupSubCategory.html",
-                    method: "POST",
-                    data: {cateID: cateID, subCateName: subCateName},
-                    success: function (response) {
-                        if (response == "1") {
-                            $("#subCateName").focus();
-                            $("#fs-sub-cate-name-err-mes").text("Duplicate Category!, Please change another one!");
-                        } else {
-                            $("form#subCategory").submit();
-                        }
-                    }
-                });
-            }
-        }
-    });
-
-    /* validation update Category */
-    $("#fs-update-category-admin-page").on("keyup", "#cateName", function () {
-        var cateName = $(this).val().trim();
-        var cateID = $("#fs-update-category-admin-page").attr("fs-category-id");
-
-        if (cateName == "") {
-            $("#fs-cate-name-err-mes").text("Category cannot be empty!");
-        } else if (!isNaN(cateName.charAt(0))) {
-            $("#fs-cate-name-err-mes").text("Category cannot begin with a number!");
-        } else if (cateName.length < 3 || cateName.length > 11) {
-            $("#fs-cate-name-err-mes").text("Category has 3 - 11 characters!");
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDupCategory.html",
-                method: "POST",
-                data: {cateID: cateID, cateName: cateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#fs-cate-name-err-mes").text("Duplicate Category!, Please change another one!");
-                    } else {
-                        $("#fs-cate-name-err-mes").text("");
-                    }
-                }
-            });
-        }
-    });
-
-    $("#fs-update-category-admin-page").on("click", "#fs-btn-update-category", function (e) {
-        e.preventDefault();
-        var cateName = $("#cateName").val().trim();
-        var cateID = $("#fs-update-category-admin-page").attr("fs-category-id");
-
-        if (cateName == "") {
-            $("#cateName").focus();
-            $("#fs-cate-name-err-mes").text("Category cannot be empty!");
-        } else if (!isNaN(cateName.charAt(0))) {
-            $("#cateName").focus();
-            $("#fs-cate-name-err-mes").text("Category cannot begin with a number!");
-        } else if (cateName.length < 3 || cateName.length > 11) {
-            $("#cateName").focus();
-            $("#fs-cate-name-err-mes").text("Category has 3 - 11 characters!");
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDupCategory.html",
-                method: "POST",
-                data: {cateID: cateID, cateName: cateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#cateName").focus();
-                        $("#fs-cate-name-err-mes").text("Duplicate Category!, Please change another one!");
-                    } else {
-                        $("form#fs-form-update-category").submit();
-                    }
-                }
-            });
-        }
-    });
-
-    /* validation update Sub - Category  */
-    $("#fs-update-sub-category-admin-page").on("change", "#fs-select-category", function () {
-        var cateID = $(this).val();
-        var subCateID = $("#fs-update-sub-category-admin-page").attr("fs-subcate-id");
-        if (cateID == 0) {
-            $("#subCateName").attr("disabled", "true");
-            $("#fs-select-cate-error-mess").text("Please choose a category!");
-        } else {
-            $("#subCateName").removeAttr("disabled");
-            var subCateName = $("#subCateName").val().trim();
-            $.ajax({
-                url: "admin/ajax/checkDupSubCategory.html",
-                method: "POST",
-                data: {cateID: cateID, subCateID: subCateID, subCateName: subCateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#fs-sub-cate-name-err-mes").text("Duplicate Sub-Category!, Please change another one!");
-                    } else {
-                        $("#fs-sub-cate-name-err-mes").text("");
-                    }
-                }
-            });
-            $("#fs-select-cate-error-mess").text("");
-        }
-    });
-
-    $("#fs-update-sub-category-admin-page").on("keyup", "#subCateName", function () {
-        var subCateName = $(this).val().trim();
-        var subCateID = $("#fs-update-sub-category-admin-page").attr("fs-subcate-id");
-        var cateID = $("#fs-select-category").val();
-
-        if (subCateName == "") {
-            $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot be empty!");
-        } else if (!isNaN(subCateName.charAt(0))) {
-            $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot begin with a number!");
-        } else if (subCateName.length < 3 || subCateName.length > 11) {
-            $("#fs-sub-cate-name-err-mes").text("Sub-Category has 3 - 11 characters!");
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDupSubCategory.html",
-                method: "POST",
-                data: {cateID: cateID, subCateID: subCateID, subCateName: subCateName},
-                success: function (response) {
-                    if (response == "1") {
-                        $("#fs-sub-cate-name-err-mes").text("Duplicate Sub-Category!, Please change another one!");
-                    } else {
-                        $("#fs-sub-cate-name-err-mes").text("");
-                    }
-                }
-            });
-        }
-
-    });
-
-    $("#fs-update-sub-category-admin-page").on("click", "#fs-btn-update-sub-category", function (e) {
-        e.preventDefault();
-        var cateID = $("#fs-select-category").val();
-
-        if (cateID == 0) {
-            $("#fs-select-category").focus();
-            $("#fs-select-cate-error-mess").text("Please choose a category!");
-        } else {
-            var subCateName = $("#subCateName").val().trim();
-            var subCateID = $("#fs-update-sub-category-admin-page").attr("fs-subcate-id");
-            if (subCateName == "") {
-                $("#subCateName").focus();
-                $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot be empty!");
-            } else if (!isNaN(subCateName.charAt(0))) {
-                $("#subCateName").focus();
-                $("#fs-sub-cate-name-err-mes").text("Sub-Category cannot begin with a number!");
-            } else if (subCateName.length < 3 || subCateName.length > 11) {
-                $("#subCateName").focus();
-                $("#fs-sub-cate-name-err-mes").text("Sub-Category has 3 - 11 characters!");
-            } else {
-                $.ajax({
-                    url: "admin/ajax/checkDupSubCategory.html",
-                    method: "POST",
-                    data: {cateID: cateID, subCateID: subCateID, subCateName: subCateName},
-                    success: function (response) {
-                        if (response == "1") {
-                            $("#subCateName").focus();
-                            $("#fs-sub-cate-name-err-mes").text("Duplicate Sub-Category!, Please change another one!");
-                        } else {
-                            $("form#fs-form-update-sub-category").submit();
-                        }
-                    }
-                });
-            }
-        }
-    });
-
-    /* Delete category - subcategory notify */
-    if ($("#fs-cate-subcate-admin-page").attr("fs-error") == "0") {
-        $.notify({
-            icon: 'glyphicon glyphicon-ok-sign',
-            title: '<strong>Success!</strong>',
-            message: 'Delete Completed!.'
-        }, {
-            type: 'success',
-            placement: {
-                from: 'top',
-                align: 'right'
-            },
-            delay: 2500,
-            timer: 200,
-            mouse_over: 'pause',
-            animate: {
-                enter: 'animated fadeInRight',
-                exit: 'animated fadeOutRight'
-            },
-            template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-4 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-        });
-    } else if ($("#fs-cate-subcate-admin-page").attr("fs-error") == "1") {
-        $.notify({
-            icon: 'glyphicon glyphicon-warning-sign',
-            title: '<strong>Error!</strong>',
-            message: 'Delete Failed, Please Refresh (F5) and do it again!.'
-        }, {
-            type: 'danger',
-            placement: {
-                from: 'top',
-                align: 'right'
-            },
-            delay: 3000,
-            timer: 200,
-            mouse_over: 'pause',
-            animate: {
-                enter: 'animated fadeInRight',
-                exit: 'animated fadeOutRight'
-            },
-            template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-        });
-    } else {
-    }
-
-    /* XỬ LÝ BUTTON DELETE PRODUCT CATEGORY - SUBCATEGORY */
-    $("#fs-cate-subcate-admin-page").on("click", ".fs-btn-delete-confirm", function () {
-        var cate_subCate_name = $(this).parent().siblings("td.fs-cate-subcate-name").text();
-        var cate_subCate_id = $(this).attr("fs-cate-subcate_id");
-        var fs_type = $(this).attr("fs-type");
-        $("#fs-modal-change-cate-subcate-name").text("\"" + cate_subCate_name + "\"");
-        if (fs_type == "cate") {
-            $("a#fs-btn-delete-cate-subcate").attr("href", "admin/deletecategory-" + cate_subCate_id + ".html");
-        } else {
-            $("a#fs-btn-delete-cate-subcate").attr("href", "admin/deletesubcategory-" + cate_subCate_id + ".html");
-        }
-
-        $("#fs-modal-confirm-delete").modal("show");
-    });
-
     //Bảng datatable của product-list
     $('#productList_dataTable').DataTable({
         responsive: true,
@@ -642,9 +108,6 @@ $(document).ready(function () {
             $("#fs-product-name-error").text("Product Name cannot be empty!");
             $("#fs-product-name").focus();
             count++;
-        } else if (!isNaN(productName.charAt(0))) {
-            $("#fs-product-name-error").text("Product Name cannot begin with a number!");
-            $("#fs-product-name").focus();
         } else if (productName.length < 5 || productName.length > 25) {
             $("#fs-product-name-error").text("Product Name must have 5 - 25 characters!");
             $("#fs-product-name").focus();
@@ -803,9 +266,6 @@ $(document).ready(function () {
                 } else {
                     if (productName == "") {
                         $("#fs-product-name-error").text("Product Name cannot be empty!");
-                    } else if (!isNaN(productName.charAt(0))) {
-                        $("#fs-product-name-error").text("Product Name cannot begin with a number!");
-                        $("#fs-product-name").focus();
                     } else if (productName.length < 5 || productName.length > 25) {
                         $("#fs-product-name-error").text("Product Name must have 5 - 25 characters!");
                     } else {
@@ -961,6 +421,7 @@ $(document).ready(function () {
         enableApi: true
     });
 
+//    var fs_count_div_color = 0;
     /* XỬ LÝ BUTTON ADD-MORE-SIZE - PRODUCT CREATE */
     $("#fs-fieldset-detail").on("click", ".fs-add-more-size", function () {
         var colorNo = $(this).parent().parent().parent().parent().attr("fs-big-div-color");
@@ -980,10 +441,8 @@ $(document).ready(function () {
                                         <i class=\"fa fa-close\" aria-hidden=\"true\"></i>\n\
                                     </button>\n\
                                 </div>\n\
-                                <div class=\"col-xs-12 error\">\n\
-                                    <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                    <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                </div>\n\
+                                <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
+                                <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
                             </div>";
         } else {
             addMoreSize = " <div class=\"col-xs-12 fs-div-size\" style=\"padding-left: 0; border: 1px #CCC dashed; margin-bottom: 5px;\">\n\
@@ -1000,10 +459,8 @@ $(document).ready(function () {
                                         <i class=\"fa fa-close\" aria-hidden=\"true\"></i>\n\
                                     </button>\n\
                                 </div>\n\
-                                <div class=\"col-xs-12 error\">\n\
-                                    <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                    <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                </div>\n\
+                                <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
+                                <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
                             </div>";
         }
 
@@ -1039,10 +496,8 @@ $(document).ready(function () {
                                             </div>\n\
                                             <div class=\"form-group col-xs-2\">\n\
                                             </div>\n\
-                                            <div class=\"col-xs-12 error\">\n\
-                                                <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                                <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                            </div>\n\
+                                            <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
+                                            <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
                                         </div>\n\
                                         <span class=\"fs-more-size\"></span>\n\
                                         <div class=\"form-group col-xs-4\" style=\"margin-top: 20px\">\n\
@@ -1158,16 +613,6 @@ $(document).ready(function () {
         e.preventDefault();
         var count = 0;
 
-        for (var i = 0; i < $(".fs-product-color-name").length; i++) {
-            for (var k = i + 1; k < $(".fs-product-color-name").length; k++) {
-                if ($(".fs-product-color-name")[i].value.toLowerCase() == $(".fs-product-color-name")[k].value.toLowerCase()) {
-                    count++;
-                    $(".fs-product-color-name")[k].focus();
-                    $(".fs-product-color-name")[k].previousElementSibling.innerHTML = "Color has already entered in color" + parseInt(i + 1);
-                }
-            }
-        }
-
         $(".fs-product-color-name").each(function () {
             if ($(this).val() == "") {
                 $(this).focus();
@@ -1193,32 +638,28 @@ $(document).ready(function () {
         $(".fs-product-size").each(function () {
             if ($(this).val() == "") {
                 $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("Size is required!");
+                $(this).parent().siblings("p.fs-error-mess-size").text("Size is required!");
                 count++;
             } else {
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("");
+                $(this).parent().siblings("p.fs-error-mess-size").text("");
             }
         });
 
         $(".fs-product-quantity").each(function () {
             if ($(this).val() == "") {
                 $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity is required!");
+                $(this).parent().siblings("p.fs-error-mess-quantity").text("Quantity is required!");
                 count++;
             } else if (isNaN($(this).val())) {
                 $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be a number!");
-                count++;
-            } else if (!(($(this).val() % 1 === 0))) {
-                $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be Integer!");
+                $(this).parent().siblings("p.fs-error-mess-quantity").text("Quantity must be a number!");
                 count++;
             } else if ($(this).val() < 0) {
                 $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be >= 0!");
+                $(this).parent().siblings("p.fs-error-mess-quantity").text("Quantity must be >= 0!");
                 count++;
             } else {
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("");
+                $(this).parent().siblings("p.fs-error-mess-quantity").text("");
             }
         });
 
@@ -1243,48 +684,31 @@ $(document).ready(function () {
             $(this).focus();
             $(this).siblings("p").text("Color has more than 3 characters!");
         } else {
-            if ($(this).siblings("p").text().indexOf("Color has already entered") == -1) {
-                $(this).siblings("p").text("");
-            }
-        }
-    });
-
-    $("#fs-fieldset-detail").on("blur", ".fs-product-color-name", function () {
-        for (var i = 0; i < $(".fs-product-color-name").length; i++) {
-            for (var k = i + 1; k < $(".fs-product-color-name").length; k++) {
-                if ($(".fs-product-color-name")[i].value.toLowerCase() == $(".fs-product-color-name")[k].value.toLowerCase()) {
-                    $(".fs-product-color-name")[k].previousElementSibling.innerHTML = "Color has already entered in Color " + parseInt(i + 1);
-                }
-            }
+            $(this).siblings("p").text("");
         }
     });
 
     $("#fs-fieldset-detail").on("keyup", ".fs-product-size", function () {
         if ($(this).val() == "") {
             $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("Size is required!");
-        } else if ($(this).val().length > 4) {
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("Size has 1 - 4 Letters!");
+            $(this).parent().siblings("p.fs-error-mess-size").text("Size is required!");
         } else {
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("");
+            $(this).parent().siblings("p.fs-error-mess-size").text("");
         }
     });
 
     $("#fs-fieldset-detail").on("keyup", ".fs-product-quantity", function () {
         if ($(this).val() == "") {
             $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity is required!");
+            $(this).parent().siblings("p.fs-error-mess-quantity").text("Quantity is required!");
         } else if (isNaN($(this).val())) {
             $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be a number!");
-        } else if (!(($(this).val() % 1 === 0))) {
-            $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be Integer!");
+            $(this).parent().siblings("p.fs-error-mess-quantity").text("Quantity must be a number!");
         } else if ($(this).val() < 0) {
             $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be >= 0!");
+            $(this).parent().siblings("p.fs-error-mess-quantity").text("Quantity must be >= 0!");
         } else {
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("");
+            $(this).parent().siblings("p.fs-error-mess-quantity").text("");
         }
     });
 
@@ -1309,14 +733,6 @@ $(document).ready(function () {
             $(".btn-edit-product-color").parent().parent().removeClass("fs-highlighter");
             $("#fs-edit-product-color-form").hide();
             $(".btn-edit-product-color").removeClass("disabled");
-            $("#fs-update-add-more-div-color").hide();
-            $("#btn-update-add-new-color-div").removeAttr("disabled");
-            $("#fs-update-input-add-more-color-error-mes").text("");
-            $("#fs-error-mess-color-img").text("");
-            $("p.fs-error-mess-size").text("");
-            $("p.fs-error-mess-quantity").text("");
-            $("#fs-update-input-add-sub-img-in-add-more-color-err-mess").text("");
-            $("form#fs-form-update-add-more-color")[0].reset();
         }
 
         if (select == 3 || select == 4) {
@@ -1345,10 +761,6 @@ $(document).ready(function () {
             $("#fs-edit-product-size").show("drop", 500);
             $(".fs-edit-product-table-size").hide();
             $("#fs-edit-product-table-size-" + colorID).show("drop", 500);
-            $("#fs-div-form-update-add-new-size").hide();
-            $("#fs-div-form-update-add-new-size form")[0].reset();
-            $("#fs-update-add-new-size-err-mess").text("");
-            $("#fs-update-add-new-quantity-err-mes").text("");
         } else {
             $("#fs-edit-product-size").hide();
         }
@@ -1357,7 +769,6 @@ $(document).ready(function () {
             $("#fs-edit-product-sub-img").show("drop", 500);
             $(".fs-edit-product-table-sub-img").hide();
             $("#fs-edit-product-table-sub-img-" + colorID).show("drop", 500);
-            $("#fs-update-form-add-new-product-image").hide();
         } else {
             $("#fs-edit-product-sub-img").hide();
         }
@@ -1372,10 +783,7 @@ $(document).ready(function () {
 
     $(".fs-edit-product-table-sub-img tbody").sortable();
 
-    $(".fs-edit-product-table-size tbody").sortable();
-
     /* 1. Edit Product General Info */
-    /* Validation */
     $("#fs-product-update-page").on("change", "#fs-product-category", function () {
         var cateID = $(this).val();
         $.ajax({
@@ -1395,100 +803,11 @@ $(document).ready(function () {
         });
     });
 
-    $("#fs-product-update-page").on("change", "#fs-product-sub-category", function () {
-        var subCateID = $(this).val();
-        if (subCateID == 0) {
-            $("#fs-product-sub-category-err-mes").text("Please choose a SubCategory!");
-        } else {
-            $("#fs-product-sub-category-err-mes").text("");
-        }
-    });
-
-    $("#fs-product-update-page").on("click", "#fs-btn-update-product-general-info", function (e) {
-        e.preventDefault();
-        var productName = $("#fs-product-name").val();
-        var subCateID = $("#fs-product-sub-category").val();
-        var price = $("#fs-product-price").val();
-        var discount = $("#fs-product-discount").val();
-        var productID = $("#fs-product-id").text();
-        var count = 0;
-
-        if (subCateID == 0) {
-            count++;
-            $("#fs-product-sub-category").focus();
-            $("#fs-product-sub-category-err-mes").text("Please choose a Sub-Category!");
-        } else {
-            $("#fs-product-sub-category-err-mes").text("");
-        }
-
-        if (productName == "") {
-            $("#fs-product-name-error").text("Product Name cannot be empty!");
-            $("#fs-product-name").focus();
-            count++;
-        } else if (!isNaN(productName.charAt(0))) {
-            $("#fs-product-name-error").text("Product Name cannot begin with a number!");
-            $("#fs-product-name").focus();
-        } else if (productName.length < 5 || productName.length > 25) {
-            $("#fs-product-name-error").text("Product Name must have 5 - 25 characters!");
-            $("#fs-product-name").focus();
-        } else {
-            $("#fs-product-name-error").text("");
-        }
-
-        if (price == "") {
-            $("#fs-product-price-error").text("Price cannot be empty!");
-            $("#fs-product-price").focus();
-            count++;
-        } else if (isNaN(price)) {
-            $("#fs-product-price-error").text("Price must be a number!");
-            $("#fs-product-price").focus();
-            count++;
-        } else if (price < 0) {
-            $("#fs-product-price-error").text("Price must be >0!.");
-            $("#fs-product-price").focus();
-            count++;
-        } else {
-            $("#fs-product-price-error").text("");
-        }
-
-        if (discount == "") {
-            $("#fs-product-discount-error").text("Discount cannot be empty!");
-            $("#fs-product-discount").focus();
-            count++;
-        } else if (isNaN(discount)) {
-            $("#fs-product-discount-error").text("Discount must be a number!");
-            $("#fs-product-discount").focus();
-            count++;
-        } else if (!(discount % 1 === 0)) {
-            $("#fs-product-discount-error").text("Discount must be Integer!");
-            $("#fs-product-discount").focus();
-            count++;
-        } else if (discount < 0 || discount > 100) {
-            $("#fs-product-discount-error").text("Discount must be from 0-100!.");
-            $("#fs-product-discount").focus();
-            count++;
-        } else {
-            $("#fs-product-discount-error").text("");
-        }
-
-        if (count == 0) {
-            $.ajax({
-                url: "admin/ajax/checkProductName.html",
-                method: "POST",
-                data: {productID: productID, productName: productName},
-                success: function (response) {
-                    if (response == 1) {
-                        $("#fs-product-name-error").text("Duplicate Product Name!");
-                        $("#fs-product-name").focus();
-                    } else {
-                        $("form#fs-form-update-sub-category-general-info").submit();
-                    }
-                }
-            });
-
-        }
-
-    });
+    if ($(".fs-alert-update-product-info").length > 0) {
+        setTimeout(function () {
+            $(".fs-alert-update-product-info").hide("fade", 500);
+        }, 2000);
+    }
 
     /* 2. Edit Product Color */
     /* Edit Product Color - Change Status */
@@ -1574,7 +893,6 @@ $(document).ready(function () {
     $("#fs-edit-product-color-form").hide();
     /* Edit Product Color - show update color form */
     $("#fs-product-update-page").on("click", ".btn-edit-product-color", function () {
-        $("#btn-update-add-new-color-div").attr("disabled", true);
         if (!$(this).hasClass("disabled")) {
             $(this).parent().parent().siblings("tr").removeClass("fs-highlighter");
             $(this).parent().parent().addClass("fs-highlighter");
@@ -1606,7 +924,6 @@ $(document).ready(function () {
 
     /* Edit Product Color - Button Cancel to close product Color FORM */
     $("#fs-product-update-page").on("click", "#btn-cancel-edit-product-color-form", function () {
-        $("#btn-update-add-new-color-div").removeAttr("disabled");
         $("#fs-edit-product-color-form").hide("slide", {direction: "up"}, "fast");
         $(".btn-edit-product-color").removeClass("disabled");
         $(".btn-edit-product-color").parent().parent().removeClass("fs-highlighter");
@@ -1658,7 +975,6 @@ $(document).ready(function () {
                             success: function (response) {
                                 if (response != "fail") {
                                     setTimeout(function () {
-                                        $("#btn-update-add-new-color-div").removeAttr("disabled");
                                         $("#fs-edit-product-color-form").hide();
                                         $("#fs-tbody-update-color-change").html(response);
                                         $("#fs-ajax-loading").css("display", "none");
@@ -1820,231 +1136,6 @@ $(document).ready(function () {
 
     });
 
-    /* Edit Product Color - hide - show add more color form */
-    $("#fs-update-add-more-div-color").hide();
-    $("#fs-product-update-page").on("click", "#btn-update-add-new-color-div", function () {
-        $("#fs-update-add-more-div-color").show("slide", {direction: "up"}, "slow");
-        $(".btn-edit-product-color").addClass("disabled");
-    });
-
-    $("#fs-product-update-page").on("click", "#fs-btn-update-close-add-more-color-form", function () {
-        $("#fs-update-add-more-div-color").hide("slide", {direction: "up"}, "slow");
-        $("#fs-update-input-add-more-color-error-mes").text("");
-        $("#fs-error-mess-color-img").text("");
-        $("p.fs-error-mess-size").text("");
-        $("p.fs-error-mess-quantity").text("");
-        $("#fs-update-input-add-sub-img-in-add-more-color-err-mess").text("");
-        $(".btn-edit-product-color").removeClass("disabled");
-        $("form#fs-form-update-add-more-color")[0].reset();
-    });
-
-    /* VALIDATION add more color form */
-    $("#fs-product-update-page").on("keyup", "#fs-update-input-add-more-color", function () {
-        var colorVal = $(this).val();
-        var productID = parseInt($("#fs-product-id").text());
-
-        //Kiểm tra rỗng
-        if (colorVal == "") {
-            $("#fs-update-input-add-more-color-error-mes").text("Color is required!");
-        } else if (colorVal.length < 3) { //Kiểm tra nhỏ nhất 3 ký tự
-            $("#fs-update-input-add-more-color-error-mes").text("Color has more than 3 characters!");
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDuplicateColorInProduct.html",
-                method: "POST",
-                data: {productID: productID, color: colorVal},
-                success: function (response) {
-                    if (response == "1") { //Kiểm tra trùng
-                        $("#fs-update-input-add-more-color-error-mes").text("Duplicate Color!. Please choose another one!");
-                    } else {
-                        $("#fs-update-input-add-more-color-error-mes").text("");
-                    }
-                }
-            });
-        }
-    });
-
-    $("#fs-product-update-page").on("keyup", ".fs-product-size", function () {
-        if ($(this).val() == "") {
-            $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("Size is required!");
-        } else if ($(this).val().length > 4) {
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("Size has 1 - 4 Letters!");
-        } else {
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("");
-        }
-    });
-
-    $("#fs-product-update-page").on("keyup", ".fs-product-quantity", function () {
-        if ($(this).val() == "") {
-            $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity is required!");
-        } else if (isNaN($(this).val())) {
-            $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be a number!");
-        } else if (!(($(this).val() % 1 === 0))) {
-            $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be Integer!");
-        } else if ($(this).val() < 0) {
-            $(this).focus();
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be >= 0!");
-        } else {
-            $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("");
-        }
-    });
-
-    $("#fs-product-update-page").on("click", "#fs-btn-update-create-color-submit", function (e) {
-        e.preventDefault();
-        var count = 0;
-        var colorVal = $("#fs-update-input-add-more-color").val();
-        var productID = parseInt($("#fs-product-id").text());
-        var colorImg = $("#fs-update-input-add-color-img").val();
-        var subImg = $("#fs-update-input-add-sub-img-in-add-more-color").val();
-
-        if (colorImg == "") {
-            $("#fs-error-mess-color-img").text("Please choose an image");
-            $("#fs-update-input-add-color-img").focus();
-            count++;
-        }
-
-        $(".fs-product-size").each(function () {
-            if ($(this).val() == "") {
-                $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("Size is required!");
-                count++;
-            } else {
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-size").text("");
-            }
-        });
-
-        $(".fs-product-quantity").each(function () {
-            if ($(this).val() == "") {
-                $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity is required!");
-                count++;
-            } else if (isNaN($(this).val())) {
-                $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be a number!");
-                count++;
-            } else if (!(($(this).val() % 1 === 0))) {
-                $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be Integer!");
-                count++;
-            } else if ($(this).val() < 0) {
-                $(this).focus();
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("Quantity must be >= 0!");
-                count++;
-            } else {
-                $(this).parent().siblings("div.error").children("p.fs-error-mess-quantity").text("");
-            }
-        });
-
-        if (subImg == "") {
-            $("#fs-update-input-add-sub-img-in-add-more-color-err-mess").text("Choose at least 1 Sub Image for Product");
-            $(this).focus();
-            count++;
-        }
-
-        if (colorVal == "") {
-            $("#fs-update-input-add-more-color-error-mes").text("Color is required!");
-            $("#fs-update-input-add-more-color").focus();
-            count++;
-        } else if (colorVal.length < 3) { //Kiểm tra nhỏ nhất 3 ký tự
-            $("#fs-update-input-add-more-color-error-mes").text("Color has more than 3 characters!");
-            $("#fs-update-input-add-more-color").focus();
-            count++;
-        } else {
-            $.ajax({
-                url: "admin/ajax/checkDuplicateColorInProduct.html",
-                method: "POST",
-                data: {productID: productID, color: colorVal},
-                success: function (response) {
-                    if (response == "1") { //Kiểm tra trùng
-                        $("#fs-update-input-add-more-color-error-mes").text("Duplicate Color!. Please choose another one!");
-                        $("#fs-update-input-add-more-color").focus();
-                        count++;
-                    } else {
-                        $("#fs-update-input-add-more-color-error-mes").text("");
-                        if (count == 0) {
-                            $("form#fs-form-update-add-more-color").submit();
-                        }
-                    }
-                }
-            });
-        }
-    });
-
-    /* Edit Product Color - Input Image fileUpload */
-    $('#fs-update-input-add-color-img').fileuploader({
-        limit: 1,
-        extensions: ['jpg', 'jpeg', 'png'],
-        dialogs: {
-            // alert dialog
-            alert: function (text) {
-                $("#fs-error-mess-color-img").text(text);
-            }
-        },
-        thumbnails: {
-            // Callback fired after the item image was loaded
-            onImageLoaded: function (itemEl, listEl, parentEl, newInputEl, inputEl) {
-                $("#fs-error-mess-color-img").empty();
-            }
-        }
-    });
-
-    $('#fs-update-input-add-sub-img-in-add-more-color').fileuploader({
-        limit: 4,
-        extensions: ['jpg', 'jpeg', 'png'],
-        dialogs: {
-            // alert dialog
-            alert: function (text) {
-                $("#fs-update-input-add-sub-img-in-add-more-color-err-mess").text(text);
-            }
-        },
-        thumbnails: {
-            // Callback fired after the item image was loaded
-            onImageLoaded: function (itemEl, listEl, parentEl, newInputEl, inputEl) {
-                $("#fs-update-input-add-sub-img-in-add-more-color-err-mess").empty();
-            }
-        }
-    });
-
-    /* Edit Product Color - Add MOre size */
-    $("#fs-product-update-page").on("click", ".fs-add-more-size", function () {
-        var addmoresize = " <div class=\"col-xs-12 fs-div-size\" style=\"border: 1px #CCC dashed;\">\n\
-                                <div class=\"form-group col-xs-5\" style=\"margin-right: 5px\">\n\
-                                    <label>Size <span class=\"fs-color-red\">*</span></label>\n\
-                                    <input name=\"size\" class=\"form-control fs-product-size\" placeholder=\"Size\" style=\"text-transform:uppercase\">\n\
-                                </div>\n\
-                                <div class=\"form-group col-xs-5\"  style=\"margin-right: 5px\">\n\
-                                    <label>Quantity <span class=\"fs-color-red\">*</span></label>\n\
-                                    <input name=\"quantity\" class=\"form-control fs-product-quantity\" placeholder=\"Quantity\">\n\
-                                </div>\n\
-                                <div class=\"form-group col-xs-2\">\n\
-                                    <button style=\"margin-top: 25px\" type=\"button\" data-toggle=\"modal\" class=\"btn btn-danger fs-btn-delete-size-confirm-in-color-form\" title=\"Delete Size\">\n\
-                                        <i class=\"fa fa-close\" aria-hidden=\"true\"></i>\n\
-                                    </button>\n\
-                                </div>\n\
-                                <div class=\"col-xs-12 error\">\n\
-                                    <p class=\"fs-error-mess-size\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                    <p class=\"fs-error-mess-quantity\" style=\"color: red; margin-left: 15px\"></p>\n\
-                                </div>\n\
-                            </div>";
-        $(this).parent().siblings(".fs-more-size").append(addmoresize);
-    });
-
-    /* Edit Product Color - Delete Size */
-    $("#fs-product-update-page").on("click", ".fs-btn-delete-size-confirm-in-color-form", function () {
-        var elem = $(this).parent().parent();
-        $("#fs-update-product-confirm-delete-size-in-color-form").modal("show");
-
-        $("#fs-update-product-confirm-delete-size-in-color-form").on("click", ".btn-update-product-confirm-delete-size-in-color-form", function () {
-            elem.remove();
-            $("#fs-update-product-confirm-delete-size-in-color-form").modal("hide");
-        });
-    });
-
-
     /*3. Edit Product Size */
     /* For SIZE */
     $('.fs-edit-product-size-val').editable({
@@ -2102,10 +1193,6 @@ $(document).ready(function () {
 
             if (isNaN(value)) {
                 return 'Quantity must be a number!';
-            }
-
-            if (!((value % 1 === 0))) {
-                return 'Quantity must be Integer!';
             }
 
             if (value < 0) {
@@ -2286,10 +1373,6 @@ $(document).ready(function () {
                                     return 'Quantity must be a number!';
                                 }
 
-                                if (!((value % 1 === 0))) {
-                                    return 'Quantity must be Integer!';
-                                }
-
                                 if (value < 0) {
                                     return 'Quantity must be >= 0!';
                                 }
@@ -2441,559 +1524,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#fs-div-form-update-add-new-size").hide();
-    /* Add Size */
-    $("#fs-product-update-page").on("click", ".fs-update-add-size", function () {
-        $("#fs-div-form-update-add-new-size").toggle("slide", {direction: "up"}, "fast");
-        $("#fs-div-form-update-add-new-size form")[0].reset();
-        $("#fs-update-add-new-size-input").focus();
-        $("#fs-update-add-new-size-err-mess").text("");
-        $("#fs-update-add-new-quantity-err-mes").text("");
-    });
-
-    $("#fs-product-update-page").on("keyup", "#fs-update-add-new-size-input", function () {
-        var size = $(this).val();
-        var colorID = $("#fs-select-product-update-choose-color").val();
-        var sizeArr = [];
-        $("#fs-edit-product-tbody-size-" + colorID).find("span.fs-edit-product-size-val").each(function () {
-            sizeArr.push($(this).text().trim());
-        });
-
-        if (size == "") {
-            $(this).focus();
-            $("#fs-update-add-new-size-err-mess").text("Size is required!");
-        } else if (sizeArr.indexOf(size.toUpperCase()) != -1) {
-            $(this).focus();
-            $("#fs-update-add-new-size-err-mess").text("We had this Size!");
-        } else if (size.length > 4) {
-            $("#fs-update-add-new-size-err-mess").text("Size has 1 - 4 Letters!");
-        } else {
-            $("#fs-update-add-new-size-err-mess").text("");
-        }
-    });
-
-    $("#fs-product-update-page").on("keyup", "#fs-update-add-new-quantity-input", function () {
-        var quantity = $(this).val();
-
-        if (quantity == "") {
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity is required!");
-        } else if (isNaN(quantity)) {
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity must be a number!");
-        } else if (!((quantity % 1 === 0))) {
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity must be Integer!");
-        } else if (quantity < 0) {
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity must be >= 0!");
-        } else {
-            $("#fs-update-add-new-quantity-err-mes").text("");
-        }
-    });
-
-    $("#fs-product-update-page").on("click", "#fs-btn-update-submit-add-new-size", function () {
-        var size = $("#fs-update-add-new-size-input").val();
-        var quantity = $("#fs-update-add-new-quantity-input").val();
-        var colorID = $("#fs-select-product-update-choose-color").val();
-        var count = 0;
-        var sizeArr = [];
-        $("#fs-edit-product-tbody-size-" + colorID).find("span.fs-edit-product-size-val").each(function () {
-            sizeArr.push($(this).text().trim());
-        });
-
-        if (quantity == "") {
-            count++;
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity is required!");
-        } else if (isNaN(quantity)) {
-            count++
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity must be a number!");
-        } else if (!((quantity % 1 === 0))) {
-            count++
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity must be Integer!");
-        } else if (quantity < 0) {
-            count++;
-            $("#fs-update-add-new-quantity-input").focus();
-            $("#fs-update-add-new-quantity-err-mes").text("Quantity must be >= 0!");
-        } else {
-            $("#fs-update-add-new-quantity-err-mes").text("");
-        }
-
-        if (size == "") {
-            count++;
-            $("#fs-update-add-new-size-input").focus();
-            $("#fs-update-add-new-size-err-mess").text("Size is required!");
-        } else if (sizeArr.indexOf(size.toUpperCase()) != -1) {
-            count++;
-            $("#fs-update-add-new-size-input").focus();
-            $("#fs-update-add-new-size-err-mess").text("We had this Size!");
-        } else if (size.length > 4) {
-            count++;
-            $("#fs-update-add-new-size-input").focus();
-            $("#fs-update-add-new-size-err-mess").text("Size has 1 - 4 Letters!");
-        } else {
-            $("#fs-update-add-new-size-err-mess").text("");
-        }
-
-        if (count == 0) {//submit
-
-            $.ajax({
-                url: "admin/ajax/addProductSize.html",
-                method: "POST",
-                data: {colorID: colorID, size: size, quantity: quantity},
-                beforeSend: function () {
-                    $("#fs-ajax-loading").css("display", "block");
-                },
-                success: function (response) {
-                    if (response == "1") { //fail
-                        $.notify({
-                            icon: 'glyphicon glyphicon-warning-sign',
-                            title: '<strong>Error!</strong>',
-                            message: 'Create FAILED! Refresh(F5) And Try Again!.'
-                        }, {
-                            type: 'danger',
-                            placement: {
-                                from: 'top',
-                                align: 'right'
-                            },
-                            delay: 3000,
-                            timer: 200,
-                            mouse_over: 'pause',
-                            animate: {
-                                enter: 'animated fadeInRight',
-                                exit: 'animated fadeOutRight'
-                            },
-                            template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                    '<span data-notify="icon"></span> ' +
-                                    '<span data-notify="title">{1}</span> ' +
-                                    '<span data-notify="message">{2}</span>' +
-                                    '<div class="progress" data-notify="progressbar">' +
-                                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                    '</div>' +
-                                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                    '</div>'
-                        });
-                    } else {
-                        //reset form
-                        $("#fs-div-form-update-add-new-size").toggle("slide", {direction: "up"}, "fast");
-                        $("#fs-div-form-update-add-new-size form")[0].reset();
-
-                        setTimeout(function () {
-                            $("#fs-edit-product-tbody-size-" + colorID).html(response);
-
-                            /* For SIZE */
-                            $('.fs-edit-product-size-val').editable({
-                                mode: 'inline',
-                                validate: function (value) {
-                                    if (value == "") {
-                                        return 'Size cannot be empty!';
-                                    }
-                                },
-                                success: function (response, newValue) {
-                                    if (response == 2) {
-                                        return 'Size has already existed in this Color!';
-                                    }
-                                }
-                            });
-                            $('.fs-edit-product-size-val').on('save', function (e, params) {
-                                $.notify({
-                                    icon: 'glyphicon glyphicon-ok-sign',
-                                    title: '<strong>Success!</strong>',
-                                    message: 'Product <strong>SIZE</strong> was changed!.'
-                                }, {
-                                    type: 'success',
-                                    placement: {
-                                        from: 'top',
-                                        align: 'right'
-                                    },
-                                    delay: 3000,
-                                    timer: 200,
-                                    mouse_over: 'pause',
-                                    animate: {
-                                        enter: 'animated fadeInRight',
-                                        exit: 'animated fadeOutRight'
-                                    },
-                                    template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                            '<span data-notify="icon"></span> ' +
-                                            '<span data-notify="title">{1}</span> ' +
-                                            '<span data-notify="message">{2}</span>' +
-                                            '<div class="progress" data-notify="progressbar">' +
-                                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                            '</div>' +
-                                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                            '</div>'
-                                });
-                            });
-
-                            /* For QUANTITY */
-                            $('.fs-edit-product-quantity-val').editable({
-                                mode: 'inline',
-                                validate: function (value) {
-                                    if (value == "") {
-                                        return 'Quantity cannot be empty!';
-                                    }
-
-                                    if (isNaN(value)) {
-                                        return 'Quantity must be a number!';
-                                    }
-
-                                    if (!((value % 1 === 0))) {
-                                        return 'Quantity must be Integer!';
-                                    }
-
-                                    if (value < 0) {
-                                        return 'Quantity must be >= 0!';
-                                    }
-                                }
-                            });
-                            $('.fs-edit-product-quantity-val').on('save', function (e, params) {
-                                $.notify({
-                                    icon: 'glyphicon glyphicon-ok-sign',
-                                    title: '<strong>Success!</strong>',
-                                    message: 'Product <strong>QUANTITY</strong> was changed!.'
-                                }, {
-                                    type: 'success',
-                                    placement: {
-                                        from: 'top',
-                                        align: 'right'
-                                    },
-                                    delay: 3000,
-                                    timer: 200,
-                                    mouse_over: 'pause',
-                                    animate: {
-                                        enter: 'animated fadeInRight',
-                                        exit: 'animated fadeOutRight'
-                                    },
-                                    template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                            '<span data-notify="icon"></span> ' +
-                                            '<span data-notify="title">{1}</span> ' +
-                                            '<span data-notify="message">{2}</span>' +
-                                            '<div class="progress" data-notify="progressbar">' +
-                                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                            '</div>' +
-                                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                            '</div>'
-                                });
-                            });
-
-                            $("#fs-ajax-loading").css("display", "none");
-
-                            $.notify({
-                                icon: 'glyphicon glyphicon-ok-sign',
-                                title: '<strong>Success!</strong>',
-                                message: 'New Size was Created!.'
-                            }, {
-                                type: 'success',
-                                placement: {
-                                    from: 'top',
-                                    align: 'right'
-                                },
-                                delay: 3000,
-                                timer: 200,
-                                mouse_over: 'pause',
-                                animate: {
-                                    enter: 'animated fadeInRight',
-                                    exit: 'animated fadeOutRight'
-                                },
-                                template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
-                            });
-                        }, 400);
-                    }
-                }
-            });
-        }
-    });
-
-    /* Change Size Order */
-    $("#fs-product-update-page").on("sortupdate", ".fs-edit-product-table-size tbody", function (event, ui) {
-        var afterSort = $(this).children("tr");
-        var colorID = parseInt($("#fs-select-product-update-choose-color").val());
-
-        var numberOfElement = afterSort.length;
-
-        $.each(afterSort, function (i, ite) {
-            var sizeID = ite.attributes[1].value;
-            var position = i;
-            $.ajax({
-                url: "admin/ajax/updateSizeOrder.html",
-                method: "POST",
-                data: {sizeID: sizeID, position: position},
-                success: function () {
-                    if (parseInt(numberOfElement) == parseInt(i + 1)) {
-                        $.ajax({
-                            url: "admin/ajax/getSizeListByColor.html",
-                            method: "POST",
-                            data: {colorID: colorID},
-                            beforeSend: function () {
-                                $("#fs-ajax-loading").css("display", "block");
-                            },
-                            success: function (response) {
-                                setTimeout(function () {
-                                    $("#fs-edit-product-tbody-size-" + colorID).html(response);
-
-                                    /* For SIZE */
-                                    $('.fs-edit-product-size-val').editable({
-                                        mode: 'inline',
-                                        validate: function (value) {
-                                            if (value == "") {
-                                                return 'Size cannot be empty!';
-                                            }
-                                        },
-                                        success: function (response, newValue) {
-                                            if (response == 2) {
-                                                return 'Size has already existed in this Color!';
-                                            }
-                                        }
-                                    });
-                                    $('.fs-edit-product-size-val').on('save', function (e, params) {
-                                        $.notify({
-                                            icon: 'glyphicon glyphicon-ok-sign',
-                                            title: '<strong>Success!</strong>',
-                                            message: 'Product <strong>SIZE</strong> was changed!.'
-                                        }, {
-                                            type: 'success',
-                                            placement: {
-                                                from: 'top',
-                                                align: 'right'
-                                            },
-                                            delay: 3000,
-                                            timer: 200,
-                                            mouse_over: 'pause',
-                                            animate: {
-                                                enter: 'animated fadeInRight',
-                                                exit: 'animated fadeOutRight'
-                                            },
-                                            template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                                    '<span data-notify="icon"></span> ' +
-                                                    '<span data-notify="title">{1}</span> ' +
-                                                    '<span data-notify="message">{2}</span>' +
-                                                    '<div class="progress" data-notify="progressbar">' +
-                                                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                                    '</div>' +
-                                                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                                    '</div>'
-                                        });
-                                    });
-
-                                    /* For QUANTITY */
-                                    $('.fs-edit-product-quantity-val').editable({
-                                        mode: 'inline',
-                                        validate: function (value) {
-                                            if (value == "") {
-                                                return 'Quantity cannot be empty!';
-                                            }
-
-                                            if (isNaN(value)) {
-                                                return 'Quantity must be a number!';
-                                            }
-
-                                            if (!((value % 1 === 0))) {
-                                                return 'Quantity must be Integer!';
-                                            }
-                                            
-                                            if (value < 0) {
-                                                return 'Quantity must be >= 0!';
-                                            }
-                                        }
-                                    });
-                                    $('.fs-edit-product-quantity-val').on('save', function (e, params) {
-                                        $.notify({
-                                            icon: 'glyphicon glyphicon-ok-sign',
-                                            title: '<strong>Success!</strong>',
-                                            message: 'Product <strong>QUANTITY</strong> was changed!.'
-                                        }, {
-                                            type: 'success',
-                                            placement: {
-                                                from: 'top',
-                                                align: 'right'
-                                            },
-                                            delay: 3000,
-                                            timer: 200,
-                                            mouse_over: 'pause',
-                                            animate: {
-                                                enter: 'animated fadeInRight',
-                                                exit: 'animated fadeOutRight'
-                                            },
-                                            template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                                    '<span data-notify="icon"></span> ' +
-                                                    '<span data-notify="title">{1}</span> ' +
-                                                    '<span data-notify="message">{2}</span>' +
-                                                    '<div class="progress" data-notify="progressbar">' +
-                                                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                                    '</div>' +
-                                                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                                    '</div>'
-                                        });
-                                    });
-
-                                    $("#fs-ajax-loading").css("display", "none");
-
-                                    $.notify({
-                                        icon: 'glyphicon glyphicon-ok-sign',
-                                        title: '<strong>Success!</strong>',
-                                        message: 'Size ORDER was changed!.'
-                                    }, {
-                                        type: 'success',
-                                        placement: {
-                                            from: 'top',
-                                            align: 'right'
-                                        },
-                                        delay: 3000,
-                                        timer: 200,
-                                        mouse_over: 'pause',
-                                        animate: {
-                                            enter: 'animated fadeInRight',
-                                            exit: 'animated fadeOutRight'
-                                        },
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                                '<span data-notify="icon"></span> ' +
-                                                '<span data-notify="title">{1}</span> ' +
-                                                '<span data-notify="message">{2}</span>' +
-                                                '<div class="progress" data-notify="progressbar">' +
-                                                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                                '</div>' +
-                                                '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                                '</div>'
-                                    });
-                                }, 400);
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
-    });
-
     /* 4. Edit Product SubImg */
-    $("#fs-update-form-add-new-product-image").hide();
-
-    /* Add Image */
-    $("#fs-product-update-page").on("click", ".fs-update-add-sub-img", function () {
-        //Đếm số child
-        var count = $(this).parents("thead").siblings("tbody").children("tr").length;
-        if (count == 4) {
-            alert("Sorry! This color already has 4 images!");
-        } else {
-            $("#fs-update-form-add-new-product-image form")[0].reset();
-            $("#fs-update-form-add-new-product-image").show("slide", {direction: "up"}, 500);
-        }
-    });
-
-    //Submit
-    $("#fs-product-update-page").on("click", "#fs-update-submit-form-add-sub-img", function () {
-        if ($("#fs-update-new-product-image-input").val() == "") {
-            $("#fs-update-new-product-image-input-err-mes").text("Choose at least 1 image!");
-            $("#fs-update-new-product-image-input").focus();
-        } else {
-            var colorID = $("#fs-select-product-update-choose-color").val();
-            var formData = new FormData();
-            formData.append("colorID", colorID);
-            formData.append("newImg", $("#fs-update-new-product-image-input")[0].files[0]);
-
-            $.ajax({
-                url: "admin/ajax/addNewProductSubImage.html",
-                method: "POST",
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    $("#fs-ajax-loading").css("display", "block");
-                },
-                success: function (response) {
-                    if (response == "1") { //fail
-                        //
-                    } else { //thành công => nhận được list subImg
-                        //Close form
-                        $("#fs-update-form-add-new-product-image").hide("slide", {direction: "up"}, "fast");
-                        $("#fs-update-form-add-new-product-image form")[0].reset();
-
-                        //render ra table image mới
-                        setTimeout(function () {
-                            $("#fs-edit-product-tbody-sub-img-" + colorID).html(response);
-                            $("#fs-edit-product-tbody-sub-img-" + colorID + " input[name=\"fs-update-product-sub-img\"]").fileuploader({
-                                limit: 1,
-                                extensions: ['jpg', 'jpeg', 'png'],
-                                enableApi: true
-                            });
-                            $("#fs-ajax-loading").css("display", "none");
-
-                            $.notify({
-                                icon: 'glyphicon glyphicon-ok-sign',
-                                title: '<strong>Success!</strong>',
-                                message: 'New Image was added!.'
-                            }, {
-                                type: 'success',
-                                placement: {
-                                    from: 'top',
-                                    align: 'right'
-                                },
-                                delay: 3000,
-                                timer: 200,
-                                mouse_over: 'pause',
-                                animate: {
-                                    enter: 'animated fadeInRight',
-                                    exit: 'animated fadeOutRight'
-                                },
-                                template: '<div data-notify="container" class="col-xs-11 col-sm-6 col-md-5 col-lg-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
-                            });
-                        }, 400);
-                    }
-                }
-            });
-        }
-    });
-
-    $("#fs-product-update-page").on("click", "#fs-update-close-form-add-sub-img", function () {
-        $("#fs-update-form-add-new-product-image").hide("slide", {direction: "up"}, "fast");
-        $(this).parents("form")[0].reset();
-    });
-
-    $('input[id="fs-update-new-product-image-input"]').fileuploader({
-        limit: 1,
-        extensions: ['jpg', 'jpeg', 'png'],
-        dialogs: {
-            // alert dialog
-            alert: function (text) {
-                $("#fs-update-new-product-image-input-err-mes").text(text);
-            }
-        },
-        thumbnails: {
-            // Callback fired after the item image was loaded
-            onImageLoaded: function (itemEl, listEl, parentEl, newInputEl, inputEl) {
-                $("#fs-update-new-product-image-input-err-mes").text("");
-            }
-        }
-    });
-
     /* Change Order */
     /* Edit Product SubImg - Sort Order SubImg - Update to Database */
     $("#fs-product-update-page").on("sortupdate", ".fs-edit-product-table-sub-img tbody", function (event, ui) {
@@ -4068,7 +2599,6 @@ $(document).ready(function () {
 
     /*==============================NGAN - ORDER============================*/
     //Thiết lập cho bảng order list
-//    $("select#id-status-order").selectBoxIt();
     $('#tableOrder').DataTable({
         responsive: true,
         order: [[4, "desc"]],
@@ -4076,7 +2606,6 @@ $(document).ready(function () {
     });
 
     //Thiết lập cho bảng order details list
-//    $("select#id-status-orderdetail").selectBoxIt();
     $('#tableOrderDetails').DataTable({
         responsive: true,
         columnDefs: [{"orderable": false, "targets": [2, 3, 8]}]
@@ -4219,8 +2748,6 @@ $(document).ready(function () {
     });
 
     //Order-list-detail-add.jsp
-//    $("select#productOrDetailAddColor").selectBoxIt();
-//    $("select#productOrDetailAddSize").selectBoxIt();
     $('#tableProductOrderDetailAdd').DataTable({
         responsive: true,
         order: [[0, "asc"]],
@@ -4419,57 +2946,115 @@ $(document).ready(function () {
     $('input[name=productOrDetailAddQuantity]').keypress(function () {
         $("#error-orderDetail-add").html("");
     });
+
+    //orders-chart.jsp
+    $('select[name=order-chart-year]').on("change", function () {
+        $('#day-money-order-chart').remove();
+        $('#day-money-order-chart-div').html("<div id=\"day-money-order-chart\" ></div>");
+    });
     if (window.location.href.includes("orderchart")) {
-        var orderDonut = Morris.Donut({
-            element: 'area-chart',
-            data: [
-                {label: "Socks", value: 30},
-                {label: "Underwear", value: 15},
-                {label: "Shirt", value: 45},
-                {label: "Pant", value: 10}
-            ]
-        });
         $.ajax({
-            url: "admin/orders/ajax/getOrderListForChart.html",
+            url: "admin/orders/ajax/orderDonutQuantitySubcategory.html",
             method: "GET",
             dataType: 'JSON',
             success: function (response) {
-//                config = {
-//                    data: response,
-//                    xkey: "category",
-//                    ykeys: "paymentTotal",
-//                    labels: ["Payment Total"],
-//                    fillOpacity: 1,
-//                    hideHover: "auto",
-//                    behaveLikeLine: true,
-//                    resize: true,
-//                    pointFillColors: ["#ffffff"],
-//                    pointStrokeColors: ["black"],
-//                    lineColors: ["red"]
-//                };
-//                config.element = "area-chart";
-//                Morris.Line(config);
-//                var ddata = response;
-//                ddata = ddata.replace(/Label/g, 'label');
-//                ddata = ddata.replace(/Value/g, 'value');
-//                console.log(ddata);
-//                orderDonut.setData(ddata);
+                Morris.Donut({
+                    element: 'donut-chart-subcategory',
+                    data: response
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
             }
         });
-//        var data = [
-//            {y: '2014', a: 50, b: 90},
-//            {y: '2015', a: 65, b: 75},
-//            {y: '2016', a: 50, b: 50},
-//            {y: '2017', a: 75, b: 60},
-//            {y: '2018', a: 80, b: 65},
-//            {y: '2019', a: 90, b: 70},
-//            {y: '2020', a: 100, b: 75},
-//            {y: '2021', a: 115, b: 75},
-//            {y: '2022', a: 120, b: 85},
-//            {y: '2023', a: 145, b: 85},
-//            {y: '2024', a: 160, b: 95}
-//        ];
-
+        $.ajax({
+            url: "admin/orders/ajax/orderDonutQuantityCategory.html",
+            method: "GET",
+            dataType: 'JSON',
+            success: function (response) {
+                Morris.Donut({
+                    element: 'donut-chart-category',
+                    data: response
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+        $.ajax({
+            url: "admin/orders/ajax/orderDonutMoneyCategory.html",
+            method: "GET",
+            dataType: 'JSON',
+            success: function (response) {
+                Morris.Donut({
+                    element: 'donut-chart-category-money',
+                    data: response,
+                    formatter: function (y, data) {
+                        return '$' + y
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+        $.ajax({
+            url: "admin/orders/ajax/orderDonutMoneySubcategory.html",
+            method: "GET",
+            dataType: 'JSON',
+            success: function (response) {
+                Morris.Donut({
+                    element: 'donut-chart-subcategory-money',
+                    data: response,
+                    formatter: function (y, data) {
+                        return '$' + y
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+        var year = $('#order-chart-year').val();
+        $.ajax({
+            url: "admin/orders/ajax/getMonthOrderedByYear.html",
+            method: "GET",
+            data: {year: year},
+            dataType: 'JSON',
+            success: function (response) {
+                for (var i = 0, max = 12; i < max; i++) {
+                    $("#btn-order-month-" + (i + 1).toString()).attr("disabled", "disabled");
+                }
+                $.each(response, function (i, item) {
+                    $("#btn-order-month-" + item).removeAttr("disabled");
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        })
     }
+    $('#order-chart-year').on("change", function () {
+        $('#day-money-order-chart').remove();
+        $('#day-money-order-chart-div').html("<div id=\"day-money-order-chart\" ></div>");
+        var year = $('#order-chart-year').val();
+        $.ajax({
+            url: "admin/orders/ajax/getMonthOrderedByYear.html",
+            method: "GET",
+            data: {year: year},
+            dataType: 'JSON',
+            success: function (response) {
+                for (var i = 0, max = 12; i < max; i++) {
+                    $("#btn-order-month-" + (i + 1).toString()).attr("disabled", "disabled");
+                }
+                $.each(response, function (i, item) {
+                    $("#btn-order-month-" + item).removeAttr("disabled");
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        })
+    });
     /*==============================END NGAN - ORDER============================*/
 });

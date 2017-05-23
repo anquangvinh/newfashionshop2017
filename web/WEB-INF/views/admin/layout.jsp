@@ -15,10 +15,10 @@
 
         <!-- Bootstrap Core CSS -->
         <link href="assets/admin/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
-
+        
         <!-- For morris.js chart -->
         <link rel="stylesheet" href="assets/admin/vendor/morrisjs/morris.css">
-
+        
         <!-- MetisMenu CSS -->
         <link href="assets/admin/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
@@ -39,10 +39,10 @@
 
         <!-- Custom Fonts -->
         <link href="assets/admin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+        
         <!-- fileUploader -->
         <link href="assets/admin/dist/css/jquery.fileuploader.css" rel="stylesheet" type="text/css"/>
-
+        
         <!-- animate - use with bootstrap notify -->
         <link href="assets/css/animate.css" rel="stylesheet" type="text/css"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -54,7 +54,7 @@
 
         <!--Thông báo css cập nhật thành công-->
         <link href="assets/css/sweetalert.css" rel="stylesheet" type="text/css"/>
-
+        
         <!--Bootstrap X-EditAble-->
         <link href="assets/admin/dist/css/bootstrap-editable.css" rel="stylesheet" type="text/css"/>
     </head>
@@ -75,12 +75,12 @@
 
         <!-- jQuery -->
         <script src="assets/admin/vendor/jquery/jquery.min.js"></script>
-
+        
         <script src="assets/js/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
         <!-- For morris.js chart -->
         <script src="assets/admin/vendor/morrisjs/morris.min.js" type="text/javascript"></script>
         <script src="assets/admin/vendor/raphael/raphael.min.js" type="text/javascript"></script>
-
+        
         <!-- Bootstrap Core JavaScript -->
         <script src="assets/admin/vendor/bootstrap/js/bootstrap.min.js"></script>
 
@@ -97,22 +97,14 @@
 
         <!-- Custom Theme JavaScript -->
         <script src="assets/admin/dist/js/sb-admin-2.js"></script>
-
+        
         <script src="assets/js/sweetalert.min.js"></script>
-
+        
         <!--bootstrap notify-->
         <script src="assets/js/bootstrap-notify.js" type="text/javascript"></script>
-
+        
         <!--bootstrap x-editable-->
         <script src="assets/admin/dist/js/bootstrap-editable.js" type="text/javascript"></script>
-
-        <!--Flot Chart-->
-        <script src="assets/admin/vendor/flot/jquery.flot.js"></script>
-        <script src="assets/admin/vendor/flot/jquery.flot.pie.js"></script>
-        <script src="assets/admin/vendor/flot/jquery.flot.resize.js"></script>
-        <script src="assets/admin/vendor/flot/jquery.flot.time.js"></script>
-        <script src="assets/admin/vendor/flot-tooltip/jquery.flot.tooltip.min.js"></script>
-        <script src="assets/admin/vendor/flot/jquery.flot.axislabels.js"></script>
         
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script src="assets/admin/dist/js/fashion_shop_custom_JS.js" type="text/javascript"></script>

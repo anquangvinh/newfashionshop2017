@@ -256,7 +256,7 @@ h1.fs-site-title{
     position:   fixed;
     z-index:    1000;
     top:        0;
-    left:       0;
+    left:       50px;
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, 0.8 ) 
@@ -405,7 +405,7 @@ input.fs-color-checkbox:checked + label:before, input.fs-size-checkbox:checked +
 .fs-heart-color {
     background: #d6644a !important;
 }
-
+=======
 /* PRODUCT DETAIL */
 .fs-display-none {
     display: none;
@@ -421,7 +421,7 @@ input.fs-color-checkbox:checked + label:before, input.fs-size-checkbox:checked +
 
 #fs-btn-login-to-review:hover {
     background-color: black;
-
+    
 }
 
 #fs-ajax-loading-2 {
@@ -436,18 +436,5 @@ input.fs-color-checkbox:checked + label:before, input.fs-size-checkbox:checked +
         url('../images/ajax-loader.gif') 
         50% 50% 
         no-repeat;
-}
-
-.fw-info .br-theme-fontawesome-stars-o .br-widget a{
-    font: normal normal normal 20px/1 FontAwesome !important;
-}
-
-.fw-info div.br-widget {
-    margin-top: 8px;
-}
-
-.fs-search-result {
-    padding: 10px; 
-    border-bottom: 1px solid #ededed;
 }
 /* CSS FOR USER-LOGIN-MODAL: */

@@ -15,6 +15,7 @@ import spring.entity.OrdersDetail;
 import spring.entity.ProductColors;
 import spring.entity.Products;
 import spring.entity.SizesByColor;
+import spring.entity.Users;
 
 /**
  *
@@ -23,14 +24,18 @@ import spring.entity.SizesByColor;
 @Local
 public interface OrderStateLessBeanLocal {
     public List<Orders> getAllOrder();
+    public List<OrdersDetail> getAllOrderDetail();
     public List<Orders> getAllOrderASC();
     public List<Categories> getAllCategory();
     public List<DiscountVoucher> getAllDiscountVoucher();
     public List<OrdersDetail> getAllOrderDetailByOrderID(int orderID);
     public List<Orders> getAllOrderByUserID(int userID);
+    public List<Orders> getAllOrderByUserIDAndStatus(int userID, int status);
     public List<Products> getListProductsByName(String productName);
     public List<ProductColors> getListProductColorsByProductID(int productID);
     public List<SizesByColor> getListSizesByColorByColorID(int colorID);
+    public List<Orders> getAllOrderByStatus(int status);
+    public List<Users> getAllUserUseDiscountVoucherByVouID(String vouID);
     
     public Orders getOrderByID(int orderID);
     public Products getProductByID(int productID);
@@ -46,5 +51,14 @@ public interface OrderStateLessBeanLocal {
     public boolean confirmStatusOrder(Orders orders, short status);
     public boolean confirmStatusOrderDetail(OrdersDetail ordersDetail, short status);
     
-    public String createPDF(String html);
+    public List<Integer> getAllYearOrdered();
+    public List<Integer> getAllMonthOrderedByYear(int year);
+    public List<Integer> getAllDayOrderedByMonth(int month, int year);
+    public List<Orders> getAllOrderByMonth(int month, int year);
+    
+    public Integer countOrderByStatus(int status);
+    public Integer countOrders();
+    public Integer averageOrdersPerUserByMonth(String date);
+    public Integer countAllOrdersByMonthYear(String date);
+    public Integer countAllUsersByRole();
 }
